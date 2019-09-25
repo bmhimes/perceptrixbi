@@ -1,0 +1,1110 @@
+	<html>
+	<head>
+		<title>Transportation Safety Dashboard - PerceptrixBI Demo - Advanced Business Analytix</title>
+
+		<script type="text/javascript" src="js/colorbrewer.js"></script>
+		<script type="text/javascript" src="js/tinycolor.js"></script>
+		<script type="text/javascript" src="js/tinygradient.js"></script>
+
+		<script type="text/javascript" src="js/jquery-3.1.0.js"></script>
+		<script type="text/javascript" src="js/jquery.tabletojson.js"></script>
+		<script type="text/javascript" src="js/notify.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="js/spin.min.js"></script>
+
+		<script type="text/javascript" src="js/bootstrap.js"></script>
+		<script type="text/javascript" src="js/accounting.js"></script>
+		<script type="text/javascript" src="js/clipboard.js"></script>
+		<script type="text/javascript" src="js/pablo.js"></script>
+
+		<script type="text/javascript" src="js/d3.min.js"></script>
+		<script type="text/javascript" src="js/d3tip.js"></script>
+		<script type="text/javascript" src="js/crossfilter.js"></script>
+		<script type="text/javascript" src="js/reductio.js"></script>
+		<script type="text/javascript" src="js/dc.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="css/dc.css" />
+		<link rel="stylesheet" type="text/css" href="css/d3tip.css" />
+		<link rel="stylesheet" type="text/css" href="css/poc.css" />
+
+		<script type="text/javascript" src="js/perceptrixbi.js"></script>
+		<script type="text/javascript" src="js/transportation.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/transportation.css" />
+	</head>
+	<body>
+		<nav id="top" class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+				<div id="page-title" class="row">
+					<div class="col-md-6 col-md-push-3">
+						<h1>Transportation Safety Dashboard</h1>
+					</div>
+					<div class="col-md-3 col-md-pull-6">
+						<!-- <div id="data-count" class="dc-data-count">
+							<span class="filter-count badge not-filtered"></span> selected out of <span class="total-count badge"></span> records. <a href="#" id="navbar-reset-all" class="btn btn-danger reset-all disabled"><span class="glyphicon glyphicon-refresh"></span>Reset All</a>
+						</div> -->
+						<div class="row">
+							<div id="top-data-count" class="col-lg-8">
+								<div id="ch-route-count">
+									<span class="filter-count badge not-filtered"></span> of <span class="total-count badge"></span> routes selected.
+								</div>
+								<div id="ch-driver-count">
+									<span class="filter-count badge not-filtered"></span> of <span class="total-count badge"></span> drivers selected.
+								</div>
+								<div id="ch-claim-count">
+									<span class="filter-count badge not-filtered"></span> of <span class="total-count badge"></span> claims selected.
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div id="reset-all-top">
+									<a href="#" id="navbar-reset-all" class="btn btn-danger reset-all disabled"><span class="glyphicon glyphicon-refresh"></span>Reset All</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div  id="dashboard-nav" class="col-md-3">
+						<!--
+						<ul class="nav navbar-nav nav-pills">
+					        <li><a href="javascript:window.scrollTo(0,0);">Dashboard<span class="sr-only">(current)</span></a></li>
+					        <li><a href="#row-dashboard-3">Detail</a></li>
+					    </ul>
+					    -->
+						<a id="simulate-real-time" class="btn btn-primary disabled" href="#"><span class="glyphicon glyphicon-play"></span>Simulate Real-Time</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<nav class="navbar navbar-default navbar-fixed-bottom">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<p class="navbar-text">Powered by</p>
+					<a class="navbar-brand" href="#">
+						<img id="navbar-platform-logo" alt="PerceptrixBI" src="img/PerceptrixBI Logo.png">
+					</a>
+					<p class="navbar-text"><small><i>The business intelligence platform of the Advanced Business Analytix enterprise software suite.</i></small></p>
+				</div>
+				<img id="navbar-company-logo" alt="Advanced Business Analytix" src="img/logo horizontal - name only.png" class="navbar-brand pull-right" data-clipboard-action="copy" data-clipboard-target="#navbar-company-logo" />
+			</div>
+		</nav>
+		<!--
+			Chart 1: average severty by home region vs route region
+			bubble chart
+			Chart 2: risk change by safety tech
+			bar chart
+			Chart 3: claim count vs simulator score (color code by weather)
+			scatter plot
+			Chart 4: total incurred by route weather type
+			doughnut chart 
+			Chart 5: claim count over time
+			chart 6: top 10 drivers at risk
+			data table: name, route ID, location, PerceptrixML risk score
+		-->
+		<div id="main" class="container-fluid">
+			<div id="row-dashboard-1" class="row row-dashboard">
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-regions" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-safety-tech" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-simulator-score" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+			</div>
+			<div id="row-dashboard-2" class="row row-dashboard">
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-weather" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-trend" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-top-risk" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+			</div>
+			<!--
+			<div id="row-dashboard-3" class="row row-dashboard">
+				<div class="col-md-12">
+					<div id="tb-rows-header-wrapper">
+						<div id="tb-rows-header" class="row"  data-spy="affix">
+							<div id="tb-rows-export" class="col-md-3 table-export">
+								<a id="tb-rows-download-csv" class="table-export btn btn-primary">
+									<span class="glyphicon glyphicon-download-alt"></span>Export to Excel
+								</a>
+								<a id="tb-rows-copy-csv" class="table-export btn btn-primary" alt="Copy CSV to Clipboard">
+									<span class="glyphicon glyphicon-copy"></span>Copy
+								</a>
+							</div>
+							<div id="tb-rows-title" class="col-md-9 inset3 center-text table-title">
+								<h4>Policy Administration System Records</h4>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div id="tb-rows-anchor" class="col-md-12 chart-dashboard">
+						</div>
+					</div>
+				</div>
+			</div>
+			-->
+		</div>
+		<script type="text/javascript">
+
+			var addChartTitle = function(chartID, schema) {
+
+				var chartSelector = "#" + chartID;
+				var chartTitleID = chartID + "-title";
+				var chartTitleSelector = "#" + chartTitleID;
+
+				if (d3.select(chartTitleSelector).size() == 0) {
+					d3.select(chartSelector).select("svg").append("text")
+						.attr("id", chartTitleID)
+						.attr("y",  2 + computeChartTitleHeight(chartID, schema) / 2)
+						.attr("class", "chart-title")
+						.text(schema.charts[chartID].chartTitle);
+
+					d3.select(chartTitleSelector)
+						.attr(
+							"x", 
+							$(chartSelector + " svg").width() / 2
+							- $(chartTitleSelector).width() / 2
+						);
+				}
+
+				
+			};
+
+			var computeChartProperty = function (chartID, property, schema) {
+				var chartSetting;
+				var chartTypeSetting;
+				var globalSetting;
+
+				if (schema.charts.hasOwnProperty(chartID) && schema.charts[chartID].hasOwnProperty(property)) {
+					chartSetting = schema.charts[chartID][property]
+				}
+
+				if (schema.defaultSettings.chart.hasOwnProperty(schema.charts[chartID].chartType) && schema.defaultSettings.chart[schema.charts[chartID].chartType].hasOwnProperty(property)) {
+					chartTypeSetting = schema.defaultSettings.chart[schema.charts[chartID].chartType][property];
+				}
+
+				if (schema.defaultSettings.chart.hasOwnProperty(property)) {
+					globalSetting = schema.defaultSettings.chart[property];
+				}
+
+				return pbi.coalesce([
+					chartSetting,
+					chartTypeSetting,
+					globalSetting
+				]);
+			};
+
+			var computeBarStrokeColor = function (chartID, schema) {
+				return computeChartProperty(chartID, "barStrokeColor", schema);
+			};
+
+			var computeBarStrokeWidth = function (chartID, schema) {
+				return computeChartProperty(chartID, "barStrokeWidth", schema);
+			};
+
+			var computeChartHeight = function (chartID, schema) {
+				// var baseHeight = computeChartProperty(chartID, "chartHeight", schema);
+
+				// var titleHeight = computeChartTitleHeight(chartID, schema);
+
+				// var finalHeight = baseHeight - titleHeight;
+
+				// return finalHeight;
+
+				return computeChartProperty(chartID, "chartHeight", schema);
+			};
+
+			var computeChartMarginBottom = function (chartID, schema) {
+				return computeChartProperty(chartID, "chartMarginBottom", schema);
+			};
+
+			var computeChartMarginLeft = function (chartID, schema) {
+				return computeChartProperty(chartID, "chartMarginLeft", schema);
+			};
+
+			var computeChartMarginRight = function (chartID, schema) {
+				return computeChartProperty(chartID, "chartMarginRight", schema);
+			};
+
+			var computeChartMargins = function (chartID, schema) {
+				return {
+					"bottom": computeChartMarginBottom(chartID, schema),
+					"left": computeChartMarginLeft(chartID, schema),
+					"right": computeChartMarginRight(chartID, schema),
+					"top": computeChartMarginTop(chartID, schema)
+				};
+			};
+
+			var computeChartMarginTop = function (chartID, schema) {
+
+				var baseMargin = computeChartProperty(chartID, "chartMarginTop", schema);
+
+				var titleHeight = computeChartTitleHeight(chartID, schema);
+
+				var finalMargin = baseMargin + titleHeight;
+
+				return finalMargin;
+			};
+
+			var computeChartTitleHeight = function (chartID, schema) {
+				return pbi.coalesce([
+					schema.defaultSettings.chart.chartTitleHeight
+				]);
+			};
+
+			var computeChartTransitionDuration = function (chartID, schema) {
+				return computeChartProperty(chartID, "chartTransitionDuration", schema);
+			}
+
+			var computeGap = function (chartID, schema) {
+				return computeChartProperty(chartID, "gap", schema);
+			};
+
+			var computeLabelOffsetX = function (chartID, schema) {
+				return computeChartProperty(chartID, "labelOffsetX", schema);
+			};
+
+			var computeLabelOffsetY = function (chartID, schema) {
+				return computeChartProperty(chartID, "labelOffsetY", schema);
+			};
+
+			var computePieChartRadius = function (chartID, schema) {
+				return computeChartProperty(chartID, "radius", schema);
+			};
+
+			var computePieChartInnerRadius = function (chartID, schema) {
+				return computeChartProperty(chartID, "innerRadius", schema);
+			};
+
+			var computeRowChartElasticX = function (chartID, schema) {
+				return pbi.coalesce([
+					schema.charts[chartID].elasticX,
+					schema.defaultSettings.chart["row"].elasticX
+				]);
+			};
+
+			var computePieSliceDeselectedStrokeWidth = function (chartID, schema) {
+				return computeChartProperty(chartID, "pieSliceDeselectedStrokeWidth", schema);
+			};
+
+			var computePieSliceSeelectedStrokeWidth = function (chartID, schema) {
+				return omputeChartProperty(chartID, "pieSliceSelectedStrokeWidth", schema);
+			};
+
+			var computePieSliceStrokeColor = function (chartID, schema) {
+				return computeChartProperty(chartID, "pieSliceStrokeColor", schema);
+			};
+
+			var computePieSliceStrokeWidth = function (chartID, schema) {
+				return computeChartProperty(chartID, "pieSliceStrokeWidth", schema);
+			};
+
+			var getMaxSizeDimension = function (jqSelector) {
+				return Math.max(
+					$(jqSelector).first().height(),
+					$(jqSelector).first().width()
+				);
+			};
+
+			var getMinSizeDimension = function (jqSelector) {
+				return Math.min(
+					$(jqSelector).first().height(),
+					$(jqSelector).first().width()
+				);
+			};
+
+			var fadeOutAllCharts = function () {
+				$(".chart-dashboard").fadeTo(400, 0);
+			};
+
+			var fadeInAllCharts = function () {
+				var callbacks = $.Callbacks();
+				callbacks.add($(".chart-dashboard").fadeTo(750, 0.05));
+				callbacks.add($(".chart-dashboard").fadeTo(1500, 1));
+				callbacks.fire();
+			};
+
+			var resetAll = function() {
+				var callbacks = $.Callbacks();
+				callbacks.add(fadeOutAllCharts);
+				callbacks.add(dc.filterAll());
+				callbacks.add(dc.renderAll());
+				callbacks.add(fadeInAllCharts);
+				callbacks.fire();
+			};
+
+
+			var spinnerOpts = {
+				  lines: 17 // The number of lines to draw
+				, length: 0 // The length of each line
+				, width: 13 // The line thickness
+				, radius: 52 // The radius of the inner circle
+				, scale: 0.25 // Scales overall size of the spinner
+				, corners: 1 // Corner roundness (0..1)
+				, color: '#000' // #rgb or #rrggbb or array of colors
+				, opacity: 0.15 // Opacity of the lines
+				, rotate: 0 // The rotation offset
+				, direction: 1 // 1: clockwise, -1: counterclockwise
+				, speed: 2.2 // Rounds per second
+				, trail: 100 // Afterglow percentage
+				, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+				, zIndex: 2e9 // The z-index (defaults to 2000000000)
+				, className: 'spinner' // The CSS class to assign to the spinner
+				, top: '250%' // Top position relative to parent
+				, left: '50%' // Left position relative to parent
+				, shadow: true // Whether to render a shadow
+				, hwaccel: true // Whether to use hardware acceleration
+				, position: 'absolute' // Element positioning
+				}
+
+
+
+
+			var ndx;
+
+
+
+
+			pbi.initialize({
+				"schema": {
+					"application": transportationPBI.schema
+				},
+				"environment": [transportationPBI.environment]
+			})
+
+			d3.selectAll(".chart-dashboard").style("opacity", 0);
+
+			$("body").css("padding-top", $("#top").height() + 25);
+
+			// Enable chart selection.
+
+			$(".graph-dashboard").on("mousedown", function () {
+				selectedChart = $(this).attr("id");
+				$(".chart-selected").removeClass("chart-selected");
+				$(this).addClass("chart-selected");
+			});
+
+			// Enable "reset all" buttons.
+			$(".reset-all").click(resetAll);
+
+
+			start = new Date().getTime();
+			
+			d3.csv("data/data_transportation.csv", function(error, data) {
+
+				end = new Date().getTime();
+				console.log("Data loaded in " + ((end - start) / 1000) + " seconds.");
+
+				start = new Date().getTime();
+
+				// Process data.
+				data.forEach(function(x) {
+
+					pbi.parseRow(x);
+				});
+
+				end = new Date().getTime();
+				console.log("Data processed in " + ((end - start) / 1000) + " seconds.");
+
+				start = new Date().getTime();
+
+
+				// Create crossfilter database from data.
+				ndx = crossfilter(data);
+
+				end = new Date().getTime();
+				console.log("Crossfilter created in " + ((end - start) / 1000) + " seconds.");
+
+				start = new Date().getTime();
+				 
+				// Define all grouping.
+				var all = ndx.groupAll();
+
+				// Define dimension builders.
+				var dimDefYearQuarter = function() {
+					return ndx.dimension(function(d) {
+						quarterNumber = d["qtr"].charAt(1)
+						yearFraction = (quarterNumber - 1) / 4.0
+						return d["yr"] + yearFraction;
+					});
+				};
+
+				// Define metric builders.
+				var metAverageNonnullCount = function (numeratorField, denomenatorField, numeratorNullValue, denomenatorNullValue) {
+					return {
+						"add": function (p, v, nf) {
+							if (v[numeratorField] !=  numeratorNullValue) {
+								p.numeratorCount += 1;
+							}
+
+							if (v[denomenatorField] !=  denomenatorNullValue) {
+								p.denomenatorCount += 1;
+							}
+
+							if (p.denomenatorCount == 0) {
+								p.avgCount = 0;
+							} else {
+								p.avgCount = p.numeratorCount / p.denomenatorCount;
+							}
+							return p;
+						},
+						"remove": function (p, v, nf) {
+							if (v[numeratorField] !=  numeratorNullValue) {
+								p.numeratorCount -= 1;
+							}
+
+							if (v[denomenatorField] !=  denomenatorNullValue) {
+								p.denomenatorCount -= 1;
+							}
+
+							if (p.denomenatorCount == 0) {
+								p.avgCount = 0;
+							} else {
+								p.avgCount = p.numeratorCount / p.denomenatorCount;
+							}
+							return p;
+						},
+						"initial": function () {
+							return {
+								"numeratorCount": 0,
+								"denomenatorCount": 0,
+								"avgCount": 0
+							};
+						}
+					};
+				};
+
+				var metRelativeAverageNonnullCount = function (numeratorField, denomenatorField, numeratorNullValue, denomenatorNullValue, totalMetric) {
+					return {
+						"add": function (p, v, nf) {
+							if (v[numeratorField] !=  numeratorNullValue) {
+								p.numeratorCount += 1;
+							}
+
+							if (v[denomenatorField] !=  denomenatorNullValue) {
+								p.denomenatorCount += 1;
+							}
+
+							if (p.denomenatorCount == 0) {
+								p.avgCount = 0;
+							} else {
+								p.avgCount = (totalMetric.value().avgCount - p.numeratorCount / p.denomenatorCount) / totalMetric.value().avgCount;
+							}
+							return p;
+						},
+						"remove": function (p, v, nf) {
+							if (v[numeratorField] !=  numeratorNullValue) {
+								p.numeratorCount -= 1;
+							}
+
+							if (v[denomenatorField] !=  denomenatorNullValue) {
+								p.denomenatorCount -= 1;
+							}
+
+							if (p.denomenatorCount == 0) {
+								p.avgCount = 0;
+							} else {
+								p.avgCount = (totalMetric.value().avgCount - p.numeratorCount / p.denomenatorCount) / totalMetric.value().avgCount;
+							}
+							return p;
+						},
+						"initial": function () {
+							return {
+								"numeratorCount": 0,
+								"denomenatorCount": 0,
+								"avgCount": 0
+							};
+						}
+					};
+				};
+
+				var metDefRegionsClaimsGroup = function(nullValues) {
+					return {
+						"add": function (p, v, nf) {
+							if (pbi.f.cid(v) != nullValues["cid"]) {
+								p.claimCount += 1;
+								p.totalClaimSeverity += pbi.f.amt(v);
+								p.avgClaimSeverity = p.totalClaimSeverity / p.claimCount;
+							} 
+							if (p.driverRegion == pbi.constants.UNDEFINED_VALUE) {
+								p.driverRegion = pbi.f.dr(v);
+							}
+							if (p.routeRegion == pbi.constants.UNDEFINED_VALUE) {
+								p.routeRegion = pbi.f.rr(v);
+							}
+							return p;
+						},
+						"remove": function (p, v, nf) {
+							if (pbi.f.cid(v) != nullValues["cid"]) {
+								p.claimCount -= 1;
+								p.totalClaimSeverity -= pbi.f.amt(v);
+								p.avgClaimSeverity = p.totalClaimSeverity / p.claimCount;
+							} 
+							return p;
+						},
+						"initial": function () {
+							return {
+								"totalClaimSeverity": 0,
+								"claimCount": 0,
+								"avgClaimSeverity": 0,
+								"driverRegion": pbi.constants.UNDEFINED_VALUE,
+								"routeRegion": pbi.constants.UNDEFINED_VALUE
+							};
+						}
+					}
+				}
+
+
+				// Define metrics.
+
+
+				// Chart: ch-regions
+				var dimRegionsClaimsGroup = ndx.dimension(function (d) {
+					return "d" + pbi.f.dr(d) + "r" + pbi.f.rr(d).toString();
+				});
+				var metRegionsClaimsGroup = dimRegionsClaimsGroup.group().reduce(
+					metDefRegionsClaimsGroup({"cid": "N/A"}).add,
+					metDefRegionsClaimsGroup({"cid": "N/A"}).remove,
+					metDefRegionsClaimsGroup({"cid": "N/A"}).initial
+				);
+
+				// Chart: ch-safety-tech
+				var tempdimSafetyTech = ndx.dimension(pbi.f.dst);
+				driverSafetyTechnologyDistinctValues = pbi.getDimDistinctValues(tempdimSafetyTech);
+				tempdimSafetyTech.dispose();
+				var labelDimAverageRiskBySafetyTech = {
+					"N/A": "None", 
+					"1": "Tech 1",
+					"2": "Tech 2",
+					"3": "Tech 3",
+					"4": "Tech 4",
+					"5": "Tech 5",
+					"6": "Tech 6"};
+				var dimAverageRiskBySafetyTech = ndx.dimension(function (d) {
+					return d["dst"];
+				});
+				
+				var metTotalAverageRiskBySafetyTech = dimAverageRiskBySafetyTech.groupAll().reduce(
+					metAverageNonnullCount("cid", "did", "N/A", "").add,
+					metAverageNonnullCount("cid", "did", "N/A", "").remove,
+					metAverageNonnullCount("cid", "did", "N/A", "").initial
+				);
+				var metAverageRiskBySafetyTech = dimAverageRiskBySafetyTech.group().reduce(
+					metRelativeAverageNonnullCount("cid", "did", "N/A", "", metTotalAverageRiskBySafetyTech).add,
+					metRelativeAverageNonnullCount("cid", "did", "N/A", "", metTotalAverageRiskBySafetyTech).remove,
+					metRelativeAverageNonnullCount("cid", "did", "N/A", "", metTotalAverageRiskBySafetyTech).initial
+				);
+
+				// Chart: ch-simulator-score
+				var dimClaimCountBySimulatorScore = ndx.dimension(function (d) {
+					return Math.trunc(pbi.f.dss(d) / 5);
+				});
+				var metUnfilteredClaimCountBySimulatorScore = dimClaimCountBySimulatorScore.group().reduce(
+					metAverageNonnullCount("cid", "dss", "N/A", "").add,
+					metAverageNonnullCount("cid", "dss", "N/A", "").remove,
+					metAverageNonnullCount("cid", "dss", "N/A", "").initial
+				);
+				var metClaimCountBySimulatorScore = pbi.agg.removeEmptyBinsAccessor(metUnfilteredClaimCountBySimulatorScore, function (d) {return d["value"]["avgCount"]});
+
+				// Chart: ch-weather
+				var dimSeverityByWeather = ndx.dimension(pbi.f.rw);
+				var metSeverityByWeather = dimSeverityByWeather.group().reduceSum(pbi.f.amt);
+
+				// Chart: ch-trend
+				var dimClaimTrendByYearQuarter = dimDefYearQuarter();
+				var metClaimTrendByYearQuarter = dimClaimTrendByYearQuarter.group().reduce(
+					pbi.agg.countNonnull("cid", "N/A").add,
+					pbi.agg.countNonnull("cid", "N/A").remove,
+					pbi.agg.countNonnull("cid", "N/A").initial
+				);
+
+				// Chart: ch-driver-count
+				var dimDriverCount = ndx.dimension(pbi.f.did);
+				var metDriverCountAll = dimDriverCount.group();
+				var metDriverCount = dimDriverCount.groupAll().reduce(
+					pbi.agg.countDistinct("did").add,
+					pbi.agg.countDistinct("did").remove,
+					pbi.agg.countDistinct("did").initial
+				);
+
+				// Chart: ch-claim-count
+				var dimClaimCount = ndx.dimension(pbi.f.cid);
+				var metClaimCountAll = dimClaimCount.group();
+				var metClaimCount = dimClaimCount.groupAll().reduce(
+					pbi.agg.countDistinct("cid").add,
+					pbi.agg.countDistinct("cid").remove,
+					pbi.agg.countDistinct("cid").initial
+				);
+				
+
+				// Define colors.
+
+				var cAverageRiskBySafetyTech = d3.scale.linear()
+					.range(["#FF0000", "#ffeda0", "#00FF00"]);
+
+				var cRegionsClaimsGroup = d3.scale.linear()
+					.range(["#ffeda0", "#f03b20"]);
+
+				var cClaimCountBySimulatorScore = d3.scale.linear()
+					.range(["#ffeda0", "#f03b20"]);
+
+				var cSeverityByWeather = d3.scale.linear()
+					.range(["#ffeda0", "#f03b20"]);
+
+				// Charts
+
+				// Dashboard row 1.
+
+				// Bubble chart.
+				// var: chRegions
+				// ID: ch-regions
+
+				chRegions = dc.bubbleChart("#ch-regions")
+					.dimension(dimRegionsClaimsGroup)
+					.group(metRegionsClaimsGroup)
+					.width(450)
+					.x(d3.scale.linear().domain([0,5]).range([0,400]))
+					.y(d3.scale.linear().domain([0,5]).range([0,200]))
+					.colorAccessor(function (p) {
+						return p.value.avgClaimSeverity;
+					})
+					.colorCalculator(cRegionsClaimsGroup)
+					// X value
+					.keyAccessor(function (p) {
+						return parseInt(p.value.driverRegion);
+					})
+					// Y value
+					.valueAccessor(function (p) {
+						return parseInt(p.value.routeRegion);
+					})
+					// Radius value
+					.radiusValueAccessor(function (p) {
+						return p.value.claimCount;
+					})
+					.addElementDropShadow(".bubble", {
+						"std": 0.5,
+						"height": 47, 
+						"width": 47, 
+						"x": "-10%", 
+						"y": "-10%", 
+						"dx": 1,
+						"dy": 1
+					})
+					.on("preRender", function (chart) {
+						chart.height(computeChartHeight(chart.anchorName(), pbi.schema))
+						chart.width($("#" + chart.anchorName()).width())
+						chart.margins(computeChartMargins(chart.anchorName(), pbi.schema))
+						chart.transitionDuration(computeChartTransitionDuration(chart.anchorName(), pbi.schema))
+
+						cRegionsClaimsGroup.domain([dc.utils.groupMin(chart.group(), chart.colorAccessor()),
+				        	dc.utils.groupMax(chart.group(), chart.colorAccessor())])
+				    	
+					})
+					.on("preRedraw", function (chart) {
+						chart.r().domain([chart.rMin(), chart.rMax()])
+						cRegionsClaimsGroup.domain([dc.utils.groupMin(chart.group(), chart.colorAccessor()),
+				        	dc.utils.groupMax(chart.group(), chart.colorAccessor())])
+
+					})
+					.renderlet(function (chart) {
+						chart.selectAll(".bubble").each(function (d, i) {
+			    			d3.select(this).transition()
+				    			.duration(1000)
+				    			.attr("fill", cRegionsClaimsGroup(chart.colorAccessor()(d)))
+				    	})
+					})
+					.on("postRender", function (chart) {
+						// Add chart title.
+						addChartTitle(chart.anchorName(), pbi.schema);
+
+						// Add drill axis.
+						chart.selectAll("g.axis.x g").classed("drill-axis-label", 1).each(function () {
+							var filterRect = d3.select(this).append("rect")
+							.attr("x", -0.5 * this.getBoundingClientRect().width * 1.3)
+							.attr("width", this.getBoundingClientRect().width * 1.3)
+							.attr("height", this.getBoundingClientRect().height * 1.3)
+							
+							.style("opacity", 0)
+							.on("click", function (labelData) {
+
+								var filterText = "d" + labelData;
+								var filterList = [];
+								chart.selectAll("g.axis.y g").each(function (d, i) {
+									if (d != 0) {
+										filterList.push(filterText + "r" + d);
+									};
+								});
+								var allFiltersPresent = chart.filterListEquals(filterList);
+								if (!allFiltersPresent) {
+
+									chart.clearFilterList()
+										.addToFilterList(filterList)
+										.applyFilterList();
+									
+								} else {
+									chart.filter(null);
+								};
+
+								dc.redrawAll(chart.chartGroup());
+								
+
+						    })});
+					})
+					.on("postRedraw", function (chart) {
+						
+				    	
+					})
+					.brushOn(true)
+					.renderLabel(false)
+					.renderTitle(true)
+					.title(function (d) {
+						return "Driver Home: " + d.value.driverRegion + "\n"
+							+ "Route Region: " + d.value.routeRegion + "\n"
+							+ "Claims: " + d.value.claimCount + "\n"
+							+ "Total Severity: " + accounting.formatMoney(d.value.totalClaimSeverity, {precision: 0}) + "\n"
+							+ "Average Severity: " + accounting.formatMoney(d.value.avgClaimSeverity, {precision: 0})
+					})
+				chRegions.xAxis()
+					.tickValues(d3.range(0, 5, 1))
+					.tickFormat(function (d) {
+						return ["", "Driver R1", "Driver R2", "Driver R3", "Driver R4", ""][d]
+					})
+				chRegions.yAxis()
+					.tickValues(d3.range(0, 5, 1))
+					.tickFormat(function (d) {
+						return ["", "R1", "R2", "R3", "R4", ""][d]
+					})
+				chRegions.MIN_RADIUS = 5
+				chRegions.maxBubbleRelativeSize(20 / chRegions.width())
+				chRegions.r().domain([chRegions.rMin(), chRegions.rMax()])
+
+				// Bar chart (bar chart).
+				// var: chSafetyTech
+				// ID: ch-safety-tech
+
+				chSafetyTech = dc.barChart("#ch-safety-tech")
+					.dimension(dimAverageRiskBySafetyTech)
+					.group(metAverageRiskBySafetyTech)
+					.x(d3.scale.ordinal())
+					.xUnits(dc.units.ordinal)
+					.valueAccessor(function (d) {
+						return d.value["avgCount"];
+					})
+					.width(450)
+
+					.centerBar(true)
+					.gap(5)
+					.renderHorizontalGridLines(true)
+					.brushOn(false)
+					.elasticY(true)
+					.colorAccessor(function (d) {
+						if (d.hasOwnProperty("data")) {
+							return d.data.value.avgCount;
+						} else {
+							return d.value.avgCount;
+						}
+					})
+				    .colorCalculator(cAverageRiskBySafetyTech)
+				    .addElementDropShadow("rect.bar", {"std": 0.5})
+				    .renderTitle(true)
+				    .title(function (d) {
+				    	return "Safety Technology: " + d.data.key + "\n"
+				    		+ "Risk Reduction: " + d3.format("0%")(d.data.value.avgCount);
+				    })
+				    .on("preRender", function (chart) {
+
+				    	chart.height(computeChartHeight(chart.anchorName(), pbi.schema));
+						chart.width($("#" + chart.anchorName()).width());
+						chart.margins(computeChartMargins(chart.anchorName(), pbi.schema));
+						chart.transitionDuration(computeChartTransitionDuration(chart.anchorName(), pbi.schema));
+
+				    	cAverageRiskBySafetyTech.domain([dc.utils.groupMin(chart.group(), chart.colorAccessor()),
+				        	0,
+				        	dc.utils.groupMax(chart.group(), chart.colorAccessor())]);
+				    })
+				    .renderlet(function (chart) {
+				    	chart.selectAll("rect.bar").each(function (d, i) {
+			    			d3.select(this).transition()
+				    			.duration(500)
+				    			.attr("fill", cAverageRiskBySafetyTech(d.y))
+				    	})
+				    })
+				    .on("preRedraw", function (chart) {
+				    	cAverageRiskBySafetyTech.domain([dc.utils.groupMin(chart.group(), chart.colorAccessor()),
+				        	0,
+				        	dc.utils.groupMax(chart.group(), chart.colorAccessor())]);
+				    })
+				    .on("postRender", function (chart) {
+				    	chart.select("g.chart-body").attr("clip-path", null);
+				    	addChartTitle(chart.anchorName(), pbi.schema);
+				    	pbi.translateSVG(chart.select("g.axis.x").node(), 0, 10);
+				    })
+				    .on("postRedraw", function (chart) {
+				    	
+				    })
+				chSafetyTech.xAxis().tickFormat(function (d) {
+					return labelDimAverageRiskBySafetyTech[d];
+				})
+				chSafetyTech.yAxis()
+					.tickFormat(function (d) {
+						return d3.format(".0%")(d);
+					})
+					.ticks(7)
+
+				// Row chart (bar chart).
+				// var: chSimulatorScore
+				// ID: ch-simulator-score
+
+				chSimulatorScore = pbi.chart.rowChart("#ch-simulator-score")
+					.dimension(dimClaimCountBySimulatorScore)
+					.group(metClaimCountBySimulatorScore)
+					.valueAccessor(function (p) {
+						return p["value"]["avgCount"];
+					})
+					.colorAccessor(function (p) {
+						return p["value"]["avgCount"];
+					})
+					.colorCalculator(cClaimCountBySimulatorScore)
+					.elasticX(true)
+					.width(450)
+					.ordering(function (d) {
+						return -d.key;
+					})
+					.addElementDropShadow("g.row rect", {"std": 0.25})
+
+					.on("preRender", function (chart) {
+						chart.height(computeChartHeight(chart.anchorName(), pbi.schema))
+						chart.width($("#" + chart.anchorName()).width())
+						chart.margins(computeChartMargins(chart.anchorName(), pbi.schema))
+						chart.labelOffsetX(computeLabelOffsetX(chart.anchorName(), pbi.schema))
+						chart.labelOffsetY(computeLabelOffsetY(chart.anchorName(), pbi.schema))
+						chart.transitionDuration(computeChartTransitionDuration(chart.anchorName(), pbi.schema))
+
+				    	cClaimCountBySimulatorScore.domain([dc.utils.groupMin(chart.group(), chart.colorAccessor()),
+				        	dc.utils.groupMax(chart.group(), chart.colorAccessor())])
+				    })
+				    .on("preRedraw", function (chart) {
+				    	cClaimCountBySimulatorScore.domain([dc.utils.groupMin(chart.group(), chart.colorAccessor()),
+				        	dc.utils.groupMax(chart.group(), chart.colorAccessor())])	
+				    })
+				    .renderlet(function (chart) {
+						chart.selectAll("g.row rect").each(function (d, i) {
+			    			d3.select(this).transition()
+				    			.duration(750)
+				    			.attr("fill", cClaimCountBySimulatorScore(d["value"]["avgCount"]))
+				    	})
+				    })
+				    .on("postRender", function (chart) {
+				    	addChartTitle(chart.anchorName(), pbi.schema);
+				    })
+				    .on("postRedraw", function (chart) {
+				    })
+				    .label(function (d) {
+						var tens = d.key;
+						var lower = tens * 5;
+						var upper = tens * 5 + 4;
+						return lower + "-" + upper;
+					})
+				chSimulatorScore.xAxis().tickFormat(function (d) {
+					return d * 1000;
+				})
+
+				// Dashboard row 2.
+
+				// Pie chart.
+				// var: chWeather
+				// ID: ch-weather
+
+				chWeather = dc.pieChart("#ch-weather")
+					.dimension(dimSeverityByWeather)
+					.group(metSeverityByWeather)
+					.ordering(pbi.ordering.valueDesc)
+					.radius(computePieChartRadius("ch-weather", pbi.schema))
+					.innerRadius(computePieChartInnerRadius("ch-weather", pbi.schema))
+					.colorAccessor(function (d) {
+						return d.value;
+					})
+					.colorCalculator(cSeverityByWeather)
+					.label(function (d) {
+						return "W-" + d.data.key;
+					})
+					.addElementDropShadow("g.pie-slice path", {"dx": 2, "dy": 2, "std": 1}, "slices")
+					.addElementDropShadow("text.pie-slice", {"dx": 2, "dy": 2, "std": 1.5}, "labels")
+					.on("preRender", function (chart) {
+						cSeverityByWeather.domain([dc.utils.groupMin(chart.group(), chart.colorAccessor()),
+				        	dc.utils.groupMax(chart.group(), chart.colorAccessor())])
+						chart.height(computeChartHeight(chart.anchorName(), pbi.schema))
+						chart.width($("#" + chart.anchorName()).width())
+						chart.transitionDuration(computeChartTransitionDuration(chart.anchorName(), pbi.schema))
+
+					})
+					.on("preRedraw", function (chart) {
+
+						cSeverityByWeather.domain([dc.utils.groupMin(chart.group(), chart.colorAccessor()),
+				        	dc.utils.groupMax(chart.group(), chart.colorAccessor())])
+					})
+					.renderlet(function (chart) {
+						chart.selectAll("g.pie-slice path")
+							.style("stroke", computePieSliceStrokeColor(chart.root().attr("id"), pbi.schema))
+							.style("stroke-width", computePieSliceStrokeWidth(chart.root().attr("id"), pbi.schema));
+				    	chart.selectAll("g.pie-slice path").each(function (d, i) {
+			    			d3.select(this).transition()
+				    			.duration(1000)
+				    			.attr("fill", cSeverityByWeather(d["value"]))
+				    	})
+					})
+					.on("postRender", function (chart) {
+						addChartTitle(chart.anchorName(), pbi.schema);
+
+					})
+					;
+
+				// Line chart.
+				// var: chTrend
+				// ID: ch-trend
+
+				chTrend = dc.lineChart("#ch-trend")
+					.dimension(dimClaimTrendByYearQuarter)
+					.group(metClaimTrendByYearQuarter)
+					.x(d3.scale.linear()
+						.domain([2015.0,2017])
+					)
+					.colors(["url(#ch-trend-line)"])
+					.elasticX(false)
+					
+					.renderTitle(true)
+					.label(function (d) {
+						return pbi.convertYearDecimalToYearQuarter(d.key);
+					})
+					.renderHorizontalGridLines(true)
+					.renderVerticalGridLines(true)
+					.addElementDropShadow(".chart-body path.line", {"dx": 0, "dy": 3, "std": "0.5,2"})
+					.on("preRender", function (chart) {
+						chart.height(computeChartHeight(chart.anchorName(), pbi.schema))
+						chart.width($("#" + chart.anchorName()).width())
+						chart.margins(computeChartMargins(chart.anchorName(), pbi.schema))
+						chart.transitionDuration(computeChartTransitionDuration(chart.anchorName(), pbi.schema))
+
+						chart.y(d3.scale.linear()
+							.domain(function() {
+								yMin = dc.utils.groupMin(chart.group(), function (d) {return d.value});
+								yMax = dc.utils.groupMax(chart.group(), function (d) {return d.value});
+								yRange = yMax - yMin
+								yAxisMin = yMin - yRange * 0.05
+								yAxisMax = yMax + yRange * 0.05
+								return [yAxisMin, yAxisMax];
+							}())
+							.range([200,0])
+						)
+					})
+					.on("preRedraw", function (chart) {
+						chart.y(d3.scale.linear()
+							.domain(function() {
+								yMin = dc.utils.groupMin(chart.group(), function (d) {return d.value});
+								yMax = dc.utils.groupMax(chart.group(), function (d) {return d.value});
+								yRange = yMax - yMin
+								yAxisMin = yMin - yRange * 0.05
+								yAxisMax = yMax + yRange * 0.05
+								return [yAxisMin, yAxisMax];
+							}())
+							.range([200,0])
+						)
+					})
+					.on("postRender", function (chart) {
+						addChartTitle(chart.anchorName(), pbi.schema)
+						chTrendDefs = chTrend.select("defs");
+						chTrendGradient = chTrendDefs.append("linearGradient")
+							.attr("id", "ch-trend-line")
+							.attr("x1", "0%")
+							.attr("y1", "50%")
+							.attr("x2", "100%")
+							.attr("y2", "50%")
+							.attr("gradientUnits", "userSpaceOnUse");
+						chTrendGradient.append("stop")
+							.attr("offset", "0%")
+							.style("stop-color", "rgb(200,200,200)")
+							.style("stop-opacity", 1);
+						chTrendGradient.append("stop")
+							.attr("offset", "80%")
+							.style("stop-color", "rgb(100,73,119)")
+							.style("stop-opacity", 1);
+							})
+					.on("postRedraw", function (chart) {
+						chart.renderYAxis(chart.g())
+					})
+				chTrend.margins().left = 60;
+				chTrend.xAxis().tickValues(d3.range(2015.0, 2017.0, 0.25));
+				chTrend.xAxis().tickFormat(function (d) {
+					return pbi.convertYearDecimalToYearQuarter(d);
+				});
+				chTrend.yAxis().tickFormat(function (d) {
+					output = ""
+					if (Math.trunc(d) == d) {
+						output = Math.trunc(d)
+					}
+					return output;
+				})
+
+				// Route count.
+				dc.dataCount("#ch-route-count")
+					.dimension(ndx)
+					.group(all)
+					.renderlet(function (chart) {
+						var filterCountSelector = ".filter-count";
+						var resetAllSelector = ".reset-all";
+						var filteredRecordCount = all.value();
+						var totalRecordCount = ndx.size();
+
+						if (filteredRecordCount < totalRecordCount) {
+							$(filterCountSelector).removeClass("not-filtered");
+							$(filterCountSelector).addClass("filtered");
+							$(resetAllSelector).removeClass("disabled");
+						} else {
+							$(filterCountSelector).removeClass("filtered");
+							$(filterCountSelector).addClass("not-filtered");
+							$(resetAllSelector).addClass("disabled");
+						}
+					});
+
+				// Driver count.
+				chDriverCount = pbi.chart.dimensionDataCount("#ch-driver-count")
+					.dimension(metDriverCountAll)
+					.group(metDriverCount)
+					.valueAccessor(function (d) {
+						return d.size();
+					});
+
+				// Claim count.
+				chClaimCount = pbi.chart.dimensionDataCount("#ch-claim-count")
+					.dimension(metClaimCountAll)
+					.group(metClaimCount)
+					.valueAccessor(function (d) {
+						return d.size();
+					});
+				
+				end = new Date().getTime();
+				console.log("Finished set up in " + ((end - start) / 1000) + " seconds.");
+				start = new Date().getTime();
+				dc.renderAll();
+				end = new Date().getTime();
+				console.log("Finished rendering in " + ((end - start) / 1000) + " seconds.");
+
+				fadeInAllCharts();
+
+			})
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,66 @@
+.dc-chart .drill-axis-label:hover text {
+	/* Dark Red */
+	text-shadow: #96141e 0 0 5px;
+}
+
+.chart-dashboard {
+	background: rgb(255,255,255); /* Old browsers */
+	background: linear-gradient(to bottom,  rgba(255,255,255,1) 50%,rgba(220,220,220,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dcdcdc',GradientType=0 ); /* IE6-9 */
+}
+
+.chart-dashboard text.pie-slice {
+	stroke: rgb(255,255,255);
+	fill: rgb(255,255,255);
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.btn {
+	box-shadow: 1px 1px 2px -1px rgba(0, 0, 0, 1.0);
+}
+
+#page-title h1 {
+	/* Dark Red */
+	color: #96141e;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+	font-size: 50px;
+	font-weight: bolder;
+}
+
+#page-title h1 span.emphasis {
+	/* Gray */
+	color: #424242;
+}
+
+#top-data-count {
+	font-size: 0.7em;
+}
+
+#top-data-count span {
+	font-size: 0.9em;
+	padding-bottom: 2px;
+	padding-top: 2px;
+}
+
+#ch-age text.pie-slice {
+	fill: #ffffff;
+	fill-opacity: 1;
+	stroke: none;
+	stroke-width: 0px;
+	font-size: 12px;
+/*	font-family: Lucida Sans Typewriter, sans-serif;*/
+    font-weight: bold;
+}
+
+.dc-chart g.grid-line line {
+	stroke: #424242;
+}
+
+.d3-tip .tip-value {
+	color: #d52330;
+}
+
+body {
+	background-color: #424242;
+}

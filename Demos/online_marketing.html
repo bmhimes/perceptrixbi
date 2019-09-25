@@ -1,0 +1,975 @@
+	<html>
+	<head>
+		<title>Online Marketing Dashboard - PerceptrixBI Demo - Advanced Business Analytix</title>
+
+		<script type="text/javascript" src="js/colorbrewer.js"></script>
+		<script type="text/javascript" src="js/tinycolor.js"></script>
+		<script type="text/javascript" src="js/tinygradient.js"></script>
+
+		<script type="text/javascript" src="js/jquery-3.1.0.js"></script>
+		<script type="text/javascript" src="js/jquery.tabletojson.js"></script>
+		<script type="text/javascript" src="js/notify.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="js/spin.min.js"></script>
+
+		<script type="text/javascript" src="js/bootstrap.js"></script>
+		<script type="text/javascript" src="js/accounting.js"></script>
+		<script type="text/javascript" src="js/clipboard.js"></script>
+		<script type="text/javascript" src="js/pablo.js"></script>
+		<script type="text/javascript" src="js/chance.js"></script>
+
+		<script type="text/javascript" src="js/d3.min.js"></script>
+		<script type="text/javascript" src="js/d3tip.js"></script>
+		<script type="text/javascript" src="js/crossfilter.js"></script>
+		<script type="text/javascript" src="js/reductio.js"></script>
+		<script type="text/javascript" src="js/dc.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="css/dc.css" />
+		<link rel="stylesheet" type="text/css" href="css/d3tip.css" />
+		<link rel="stylesheet" type="text/css" href="css/poc.css" />
+
+		<script type="text/javascript" src="js/perceptrixbi.js"></script>
+		<script type="text/javascript" src="js/online_marketing.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/online_marketing.css" />
+	</head>
+	<body>
+		<nav id="top" class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+				<div id="page-title" class="row">
+					<div class="col-md-6 col-md-push-3">
+						<h1>Marketing <span class="emphasis">Analytics</span> Dashboard</h1>
+					</div>
+					<div class="col-md-3 col-md-pull-6">
+						<!-- <div id="data-count" class="dc-data-count">
+							<span class="filter-count badge not-filtered"></span> selected out of <span class="total-count badge"></span> records. <a href="#" id="navbar-reset-all" class="btn btn-danger reset-all disabled"><span class="glyphicon glyphicon-refresh"></span>Reset All</a>
+						</div> -->
+						<div class="row">
+							<div class="col-lg-4">
+								<div id="reset-all-top">
+									<a href="#" id="navbar-reset-all" class="btn btn-danger reset-all disabled"><span class="glyphicon glyphicon-refresh"></span>Reset All</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="dropdown">
+							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+								Metrics
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+								<li class="dropdown-header">Activity</li>
+								<li><a class="cycle-metric-activity select-metric-0">Impressions</a></li>
+								<li><a class="cycle-metric-activity select-metric-1">Clicks</a></li>
+								<li class="dropdown-header">Campaign</li>
+								<li><a class="cycle-metric-campaign select-metric-0">CTR</a></li>
+								<li><a class="cycle-metric-campaign select-metric-1">Clicks</a></li>
+								<li><a class="cycle-metric-campaign select-metric-2">Impressions</a></li>
+							</ul>
+							<a id="simulate-real-time" class="btn btn-primary" href="#"><span class="glyphicon glyphicon-play"></span>Simulate Real-Time</a>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</nav>
+
+		<nav class="navbar navbar-default navbar-fixed-bottom">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<p class="navbar-text">Powered by</p>
+					<a class="navbar-brand" href="#">
+						<img id="navbar-platform-logo" alt="PerceptrixBI" src="img/PerceptrixBI Logo.png">
+					</a>
+					<p class="navbar-text"><small><i>The business intelligence platform of the Advanced Business Analytix enterprise software suite.</i></small></p>
+				</div>
+				<img id="navbar-company-logo" alt="Advanced Business Analytix" src="img/logo horizontal - name only.png" class="navbar-brand pull-right" data-clipboard-action="copy" data-clipboard-target="#navbar-company-logo" />
+			</div>
+		</nav>
+		<!--
+			Chart 1: impressions/clicks per day
+			line chart
+			Chart 2: impressions/clicks by gender
+			doughnut chart
+			chart 3: impressions/clicks by age group
+			doughnut chart
+			chart 4: campaign ctr
+			row chart
+		-->
+		<div id="main" class="container-fluid">
+			<div id="row-dashboard-1" class="row row-dashboard">
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-6 chart-receptacle">
+					<div id="ch-trend" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-3 chart-receptacle">
+				</div>
+			</div>
+			<div id="row-dashboard-2" class="row row-dashboard">
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-3 chart-receptacle">
+					<div id="ch-gender" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-3 chart-receptacle">
+					<div id="ch-age" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-3 chart-receptacle">
+				</div>
+			</div>
+			<div id="row-dashboard-3" class="row row-dashboard">
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-6 chart-receptacle">
+					<div id="ch-campaign" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-3 chart-receptacle">
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+
+			var addChartTitle = function(chartID, schema) {
+
+				var chartSelector = "#" + chartID;
+				var chartTitleID = chartID + "-title";
+				var chartTitleSelector = "#" + chartTitleID;
+
+				if (d3.select(chartTitleSelector).size() == 0) {
+					d3.select(chartSelector).select("svg").append("text")
+						.attr("id", chartTitleID)
+						.attr("y",  2 + computeChartTitleHeight(chartID, schema) / 2)
+						.attr("class", "chart-title")
+						.text(schema.charts[chartID].chartTitle);
+
+					d3.select(chartTitleSelector)
+						.attr(
+							"x", 
+							$(chartSelector + " svg").width() / 2
+							- $(chartTitleSelector).width() / 2
+						);
+				}
+
+				
+			};
+
+			var computeChartProperty = function (chartID, property, schema) {
+				var chartSetting;
+				var chartTypeSetting;
+				var globalSetting;
+
+				if (schema.charts.hasOwnProperty(chartID) && schema.charts[chartID].hasOwnProperty(property)) {
+					chartSetting = schema.charts[chartID][property]
+				}
+
+				if (schema.defaultSettings.chart.hasOwnProperty(schema.charts[chartID].chartType) && schema.defaultSettings.chart[schema.charts[chartID].chartType].hasOwnProperty(property)) {
+					chartTypeSetting = schema.defaultSettings.chart[schema.charts[chartID].chartType][property];
+				}
+
+				if (schema.defaultSettings.chart.hasOwnProperty(property)) {
+					globalSetting = schema.defaultSettings.chart[property];
+				}
+
+				return pbi.coalesce([
+					chartSetting,
+					chartTypeSetting,
+					globalSetting
+				]);
+			};
+
+			var computeBarStrokeColor = function (chartID, schema) {
+				return computeChartProperty(chartID, "barStrokeColor", schema);
+			};
+
+			var computeBarStrokeWidth = function (chartID, schema) {
+				return computeChartProperty(chartID, "barStrokeWidth", schema);
+			};
+
+			var computeChartHeight = function (chartID, schema) {
+				// var baseHeight = computeChartProperty(chartID, "chartHeight", schema);
+
+				// var titleHeight = computeChartTitleHeight(chartID, schema);
+
+				// var finalHeight = baseHeight - titleHeight;
+
+				// return finalHeight;
+
+				return computeChartProperty(chartID, "chartHeight", schema);
+			};
+
+			var computeChartMarginBottom = function (chartID, schema) {
+				return computeChartProperty(chartID, "chartMarginBottom", schema);
+			};
+
+			var computeChartMarginLeft = function (chartID, schema) {
+				return computeChartProperty(chartID, "chartMarginLeft", schema);
+			};
+
+			var computeChartMarginRight = function (chartID, schema) {
+				return computeChartProperty(chartID, "chartMarginRight", schema);
+			};
+
+			var computeChartMargins = function (chartID, schema) {
+				return {
+					"bottom": computeChartMarginBottom(chartID, schema),
+					"left": computeChartMarginLeft(chartID, schema),
+					"right": computeChartMarginRight(chartID, schema),
+					"top": computeChartMarginTop(chartID, schema)
+				};
+			};
+
+			var computeChartMarginTop = function (chartID, schema) {
+
+				var baseMargin = computeChartProperty(chartID, "chartMarginTop", schema);
+
+				var titleHeight = computeChartTitleHeight(chartID, schema);
+
+				var finalMargin = baseMargin + titleHeight;
+
+				return finalMargin;
+			};
+
+			var computeChartTitleHeight = function (chartID, schema) {
+				return pbi.coalesce([
+					schema.defaultSettings.chart.chartTitleHeight
+				]);
+			};
+
+			var computeChartTransitionDuration = function (chartID, schema) {
+				return computeChartProperty(chartID, "chartTransitionDuration", schema);
+			}
+
+			var computeGap = function (chartID, schema) {
+				return computeChartProperty(chartID, "gap", schema);
+			};
+
+			var computeLabelOffsetX = function (chartID, schema) {
+				return computeChartProperty(chartID, "labelOffsetX", schema);
+			};
+
+			var computeLabelOffsetY = function (chartID, schema) {
+				return computeChartProperty(chartID, "labelOffsetY", schema);
+			};
+
+			var computePieChartRadius = function (chartID, schema) {
+				return computeChartProperty(chartID, "radius", schema);
+			};
+
+			var computePieChartInnerRadius = function (chartID, schema) {
+				return computeChartProperty(chartID, "innerRadius", schema);
+			};
+
+			var computeRowChartElasticX = function (chartID, schema) {
+				return pbi.coalesce([
+					schema.charts[chartID].elasticX,
+					schema.defaultSettings.chart["row"].elasticX
+				]);
+			};
+
+			var computePieSliceDeselectedStrokeWidth = function (chartID, schema) {
+				return computeChartProperty(chartID, "pieSliceDeselectedStrokeWidth", schema);
+			};
+
+			var computePieSliceSeelectedStrokeWidth = function (chartID, schema) {
+				return omputeChartProperty(chartID, "pieSliceSelectedStrokeWidth", schema);
+			};
+
+			var computePieSliceStrokeColor = function (chartID, schema) {
+				return computeChartProperty(chartID, "pieSliceStrokeColor", schema);
+			};
+
+			var computePieSliceStrokeWidth = function (chartID, schema) {
+				return computeChartProperty(chartID, "pieSliceStrokeWidth", schema);
+			};
+
+			var getMaxSizeDimension = function (jqSelector) {
+				return Math.max(
+					$(jqSelector).first().height(),
+					$(jqSelector).first().width()
+				);
+			};
+
+			var getMinSizeDimension = function (jqSelector) {
+				return Math.min(
+					$(jqSelector).first().height(),
+					$(jqSelector).first().width()
+				);
+			};
+
+			var fadeOutAllCharts = function () {
+				$(".chart-dashboard").fadeTo(400, 0);
+			};
+
+			var fadeInAllCharts = function () {
+				var callbacks = $.Callbacks();
+				callbacks.add($(".chart-dashboard").fadeTo(750, 0.05));
+				callbacks.add($(".chart-dashboard").fadeTo(1500, 1));
+				callbacks.fire();
+			};
+
+			var resetAll = function() {
+				var callbacks = $.Callbacks();
+				callbacks.add(fadeOutAllCharts);
+				callbacks.add(dc.filterAll());
+				callbacks.add(dc.renderAll());
+				callbacks.add(fadeInAllCharts);
+				callbacks.fire();
+			};
+
+			var getDimDistinctValues = function (dim) {
+				var output = [];
+				var grouping = dim.group().all();
+				for (valueIndex = 0; valueIndex < grouping.length; valueIndex++) {
+					output[valueIndex] = grouping[valueIndex].key;
+				}
+				return output;
+			};
+
+			var simulationEnabled = false;
+			var simulatedRecordsAdded = 0;
+
+			var simulationLoop = function (ndx) {
+
+				var delay = Math.max(0, d3.random.normal(2600, 500)());
+				var records = parseInt(Math.max(0, d3.random.normal(1000, 500)()));
+				
+				if (simulationEnabled == true) {
+					addNewSimulatedRow(ndx, records);
+					simulatedRecordsAdded += records;
+					$.notify(
+						"New data received. (#" + simulatedRecordsAdded + ")", 
+						{
+							"autoHideDelay": 2000,
+							"className": "success",
+							"globalPosition": "bottom center"
+						});
+					setTimeout(function () {simulationLoop(ndx)}, delay);
+				}
+			}
+
+			var addNewSimulatedRow = function (ndx, count) {
+
+				count = pbi.coalesce([count, 1]);
+
+				var newRecordSet = d3.map();
+
+				var day = 31;
+				var cid_list = ['PD', 'D', 'DI', 'R', 'B'];
+				var cid_prob = [0.5165 * 0.5, 0.0176, 0.2872 * 2, 0.0110 * 10, 0.1677];
+				var cid_click_prob = {'PD': 0.004962341, 'D': 0.003993925, 'DI': 0.003819111 * 10, 'R': 0.009985606, 'B': 0.006186846}
+				var gender_list = ['U', 'M', 'F'];
+				var gender_prob = [0.3800 * 30, 0.2210, 0.3990];
+				var age_list = ['U', 1, 2, 3, 4, 5, 6];
+				var age_prob = [0.4096 * 0.5, 0.0711, 0.0738, 0.0641 * 100, 0.0650, 0.1132, 0.2032 * 0.5];
+
+
+				for (recordIndex = 0; recordIndex < count; recordIndex++) {
+
+					var cid = chance.weighted(cid_list, cid_prob);
+					var click_prob = cid_click_prob[cid];
+					var click = chance.weighted([1, 0], [click_prob, 1 - click_prob]);
+					var gender = chance.weighted(gender_list, gender_prob);
+					var age = chance.weighted(age_list, age_prob);
+
+					var dimKey = [cid, gender, age, day].join();
+
+					var oldImpressions = 0;
+					var oldClicks = 0;
+
+					if (newRecordSet.has(dimKey)) {
+						var values = newRecordSet.get(dimKey);
+						oldImpressions = values["i"];
+						oldClicks = values["cl"];
+					}
+
+					newRecordSet.set(dimKey, {
+						"cid": cid,
+						"g": gender,
+						"a": age,
+						"d": day,
+						"i": oldImpressions + 1,
+						"cl": oldClicks + click,
+					})
+				}
+
+				ndx.add(newRecordSet.values());
+
+				dc.redrawAll();
+
+			};
+			
+
+
+			var ndx;
+
+			pbi.initialize({
+				"schema": {
+					"application": onlineMarketingPBI.schema
+				},
+				"environment": [onlineMarketingPBI.environment]
+			})
+
+			d3.selectAll(".chart-dashboard").style("opacity", 0);
+
+			$("body").css("padding-top", $("#top").height() + 25);
+
+			// Enable chart selection.
+
+			$(".graph-dashboard").on("mousedown", function () {
+				selectedChart = $(this).attr("id");
+				$(".chart-selected").removeClass("chart-selected");
+				$(this).addClass("chart-selected");
+			});
+
+			// Enable "reset all" buttons.
+			$(".reset-all").click(resetAll);
+
+			
+
+
+			start = new Date().getTime();
+			
+			d3.csv("data/data_online_marketing_agg.csv", function(error, data) {
+
+				end = new Date().getTime();
+				console.log("Data loaded in " + ((end - start) / 1000) + " seconds.");
+
+				start = new Date().getTime();
+
+				// Process data.
+				data.forEach(function(x) {
+					pbi.parseRow(x);
+				});
+
+				end = new Date().getTime();
+				console.log("Data processed in " + ((end - start) / 1000) + " seconds.");
+
+				// console.log(JSON.stringify(data));
+
+				start = new Date().getTime();
+
+
+				// Create crossfilter database from data.
+				ndx = crossfilter(data);
+
+				end = new Date().getTime();
+				console.log("Crossfilter created in " + ((end - start) / 1000) + " seconds.");
+
+				start = new Date().getTime();
+				 
+				// Define all grouping.
+				var all = ndx.groupAll();
+
+				// // Define metrics.
+
+				// Chart: ch-trend
+				var dimActionsByDay = ndx.dimension(pbi.f.d);
+				var metActionsByDay = dimActionsByDay.group().reduceSum(pbi.f.i);
+
+				// Chart: ch-gender
+				var dimActionsByGender = ndx.dimension(pbi.f.g);
+				var metActionsByGender = dimActionsByGender.group().reduceSum(pbi.f.i);
+
+				// Chart: ch-age
+				var dimActionsByAge = ndx.dimension(pbi.f.a);
+				var metActionsByAge = dimActionsByAge.group().reduceSum(pbi.f.i);
+
+				// Chart: ch-campaign
+				var dimCampaignPerformance = ndx.dimension(pbi.f.cid);
+				var metCampaignPerformance = dimCampaignPerformance.group().reduce(
+					pbi.agg.sumRatio("cl", "i").add,
+					pbi.agg.sumRatio("cl", "i").remove,
+					pbi.agg.sumRatio("cl", "i").initial
+				);
+
+				// // Chart: ch-driver-count
+				// var dimDriverCount = ndx.dimension(pbi.f.did);
+				// var metDriverCountAll = dimDriverCount.group();
+				// var metDriverCount = dimDriverCount.groupAll().reduce(
+				// 	pbi.agg.countDistinct("did").add,
+				// 	pbi.agg.countDistinct("did").remove,
+				// 	pbi.agg.countDistinct("did").initial
+				// );
+
+				// // Chart: ch-claim-count
+				// var dimClaimCount = ndx.dimension(pbi.f.cid);
+				// var metClaimCountAll = dimClaimCount.group();
+				// var metClaimCount = dimClaimCount.groupAll().reduce(
+				// 	pbi.agg.countDistinct("cid").add,
+				// 	pbi.agg.countDistinct("cid").remove,
+				// 	pbi.agg.countDistinct("cid").initial
+				// );
+				
+				// // Define colors.
+
+				var cAge = d3.scale.ordinal()
+					.domain(getDimDistinctValues(dimActionsByAge))
+					.range(
+						tinygradient([
+							{'color': pbi.schema.colors.theme["DarkRed"], 'pos': 0},
+							{'color': pbi.schema.colors.theme["Red"], 'pos': 0.3},
+							{'color': pbi.schema.colors.theme["Pink"], 'pos': 0.5},
+							{'color': pbi.schema.colors.theme["LightGray"], 'pos': 0.75},
+							{'color': pbi.schema.colors.theme["DarkGray"], 'pos': 1} 
+						]).rgb(7)
+					);
+
+				var cCampaign = d3.scale.ordinal()
+					.domain(getDimDistinctValues(dimCampaignPerformance))
+					.range(
+						tinygradient([
+							{'color': pbi.schema.colors.theme["DarkRed"], 'pos': 0},
+							{'color': pbi.schema.colors.theme["Red"], 'pos': 0.3},
+							{'color': pbi.schema.colors.theme["Pink"], 'pos': 0.6},
+							{'color': pbi.schema.colors.theme["LightGray"], 'pos': 1}
+						]).rgb(5)
+					);
+
+				var cGender = d3.scale.ordinal()
+					.domain(["M", "F", "U"])
+					.range([
+						pbi.schema.colors.theme["DarkGray"],
+						pbi.schema.colors.theme["Red"],
+						pbi.schema.colors.theme["LightGray"]
+					]);
+
+				// UI elements.
+
+				var formatCTR = d3.format(".2p");
+				var formatImpressions = d3.format(",d");
+				var formatClicks = d3.format(",d");
+
+				var activityMetricLabels = ["Impressions", "Clicks"];
+				var activityMetricLabel = activityMetricLabels[0];
+				var cycleActivityMetric = function (metricID) {
+					var cyclicChartIDs = ["ch-trend", "ch-gender", "ch-age"];
+					var oldActivityMetricLabel = activityMetricLabel;
+					activityMetricLabel = activityMetricLabels[metricID];
+
+					$.each(cyclicChartIDs, function(chartIndex, chartID) {
+						var chart = dc.getChartByAnchorName(chartID);
+						var dim = chart.dimension();
+						var newMetric = {};
+
+						switch (metricID) {
+							case 0:
+								// Impressions.
+								newMetric = dim.group().reduceSum(pbi.f.i);
+								break;
+							case 1:
+								// Clicks.
+								newMetric = dim.group().reduceSum(pbi.f.cl);
+								break;
+						}
+
+						pbi.schema.charts[chartID].chartTitle = pbi.schema.charts[chartID].chartTitle.replace(oldActivityMetricLabel, activityMetricLabel);
+						chart.group(newMetric);
+						chart.render();
+					});
+				};
+				
+				var campaignMetricLabels = ["CTR", "Interactions", "Impressions"];
+				var campaignMetricLabel = campaignMetricLabels[0];
+				var cycleCampaignMetric = function (metricID) {
+					var cyclicChartIDs = ["ch-campaign"];
+					var oldCampaignMetricLabel = campaignMetricLabel;
+					campaignMetricLabel = campaignMetricLabels[metricID];
+
+					$.each(cyclicChartIDs, function(chartIndex, chartID) {
+						var chart = dc.getChartByAnchorName(chartID);
+						var dim = chart.dimension();
+						var newMetric = {};
+						var newTickFormat = {};
+
+						switch (metricID) {
+							case 0:
+								// Click-through rate.
+								newMetric = dim.group().reduce(
+									pbi.agg.sumRatio("cl", "i").add,
+									pbi.agg.sumRatio("cl", "i").remove,
+									pbi.agg.sumRatio("cl", "i").initial
+								);
+								newTickFormat = formatCTR;
+								chart
+									.valueAccessor(function (p) {
+										return p["value"]["sumRatio"];
+									})
+									.ordering(function (d) {
+										return -d.value["sumRatio"];
+									});
+								break;
+							case 1:
+								// Clicks.
+								newMetric = dim.group().reduceSum(pbi.f.cl);
+								newTickFormat = formatClicks;
+								chart
+									.valueAccessor(function (p) {
+										return p["value"];
+									})
+									.ordering(pbi.ordering.valueDesc);
+								break;
+							case 2:
+								// Impressions.
+								newMetric = dim.group().reduceSum(pbi.f.i);
+								newTickFormat = formatImpressions;
+								chart
+									.valueAccessor(function (p) {
+										return p["value"];
+									})
+									.ordering(pbi.ordering.valueDesc);
+								break;
+							
+						}
+
+						pbi.schema.charts[chartID].chartTitle = pbi.schema.charts[chartID].chartTitle.replace(oldCampaignMetricLabel, campaignMetricLabel);
+						chart.group(newMetric);
+						chart.xAxis().tickFormat(newTickFormat);
+						chart.render();
+					});
+				};
+				
+				// Enable activity metric cycling.
+				$(".select-metric-0").data("select-metric-id", 0);
+				$(".select-metric-1").data("select-metric-id", 1);
+				$(".select-metric-2").data("select-metric-id", 2);
+				$(".cycle-metric-activity").each(function () {
+					$(this).click(function () {
+						cycleActivityMetric($(this).data("select-metric-id"));
+					});
+				});
+				$(".cycle-metric-campaign").each(function () {
+					$(this).click(function () {
+						cycleCampaignMetric($(this).data("select-metric-id"));
+					});
+				});
+
+				// Value labels.
+				// TODO: refactor into schema.
+				var genderLabels = {
+					"M": "Male",
+					"F": "Female",
+					"U": "Undetermined"
+				};
+				var ageLabels = {
+					"U": "Undetermined",
+					1: "18-24",
+					2: "25-34",
+					3: "35-44",
+					4: "45-54",
+					5: "55-64",
+					6: "65 or more"
+				};
+				var campaignLabels = {
+					"PD": "Pediatric Dentistry",
+					"D": "Display",
+					"DI": "Dental Implants",
+					"R": "Remarketing",
+					"B": "Braces" 
+				};
+
+				// Enable simulation button.
+				var simulationButton = $("#simulate-real-time");
+				simulationButton.data("enabled", false);
+				simulationButton.data("glyphicon-enabled", "glyphicon-pause");
+				simulationButton.data("glyphicon-disabled", "glyphicon-play");
+				simulationButton.click(function() {
+					var simulationButtonGlyphicon = simulationButton.find("span.glyphicon");
+
+					var toggleSimulationState = function () {
+						
+						var enableSimulation = function () {
+							simulationEnabled = true;
+							simulationButton.data("enabled", true);
+							pbi.removeGlyphiconImageClasses(simulationButtonGlyphicon);
+							simulationButtonGlyphicon.addClass(simulationButton.data("glyphicon-enabled"))
+							simulationLoop(ndx);
+						};
+						var disableSimulation = function () {
+							simulationEnabled = false;
+							simulationButton.data("enabled", false);
+							pbi.removeGlyphiconImageClasses(simulationButtonGlyphicon);
+							simulationButtonGlyphicon.addClass(simulationButton.data("glyphicon-disabled"))
+						};
+
+						if (simulationButton.data("enabled") == true) {
+							disableSimulation();
+						} else {
+							enableSimulation();
+						}
+					};
+
+					toggleSimulationState()
+				});
+
+				// Charts
+
+				// Dashboard row 1.
+
+				// Line chart.
+				// var: chTrend
+				// ID: ch-trend
+
+				chTrend = dc.lineChart("#ch-trend")
+					.dimension(dimActionsByDay)
+					.group(metActionsByDay)
+					.x(d3.scale.linear().domain([0,32]))
+					.colors([pbi.schema.colors.theme["Red"]])
+					.elasticX(false)
+					.renderTitle(true)
+					.label(function (d) {return d.key;})
+					.renderHorizontalGridLines(true)
+					.renderVerticalGridLines(true)
+					.renderChartDownloadImageButton(false)
+					.addElementDropShadow(".chart-body path.line", {"dx": 0, "dy": 3, "std": "0.5,2"})
+					.on("preRender", function (chart) {
+						chart.height(computeChartHeight(chart.anchorName(), pbi.schema))
+						chart.width($("#" + chart.anchorName()).width())
+						chart.margins(computeChartMargins(chart.anchorName(), pbi.schema))
+						chart.transitionDuration(computeChartTransitionDuration(chart.anchorName(), pbi.schema))
+
+						chart.y(d3.scale.linear()
+							.domain(function() {
+								yMin = dc.utils.groupMin(chart.group(), function (d) {return d.value});
+								yMax = dc.utils.groupMax(chart.group(), function (d) {return d.value});
+								yRange = yMax - yMin
+								yAxisMin = yMin - yRange * 0.00
+								yAxisMax = yMax + yRange * 0.05
+								return [yAxisMin, yAxisMax];
+							}())
+							.range([200,0])
+						)
+					})
+					.on("preRedraw", function (chart) {
+						chart.y(d3.scale.linear()
+							.domain(function() {
+								yMin = dc.utils.groupMin(chart.group(), function (d) {return d.value});
+								yMax = dc.utils.groupMax(chart.group(), function (d) {return d.value});
+								yRange = yMax - yMin
+								yAxisMin = yMin - yRange * 0.00
+								yAxisMax = yMax + yRange * 0.05
+								return [yAxisMin, yAxisMax];
+							}())
+							.range([200,0])
+						)
+					})
+					.on("postRender", function (chart) {
+						addChartTitle(chart.anchorName(), pbi.schema)
+					})
+					.on("postRedraw", function (chart) {
+						chart.renderYAxis(chart.g())
+					})
+				;
+				chTrend.margins().left = 60;
+				chTrend.xAxis().tickValues(d3.range(0, 32, 1));
+
+				// Dashboard row 2.
+
+				// Pie chart.
+				// var: chGender
+				// ID: ch-gender
+
+				chGender = dc.pieChart("#ch-gender")
+					.dimension(dimActionsByGender)
+					.group(metActionsByGender)
+					.ordering(pbi.ordering.valueDesc)
+					.colorAccessor(function (d) {
+						return d.data.key;
+					})
+					.colorCalculator(cGender)
+					.renderTitle(false)
+					.renderChartDownloadImageButton(false)
+					.radius(computePieChartRadius("ch-gender", pbi.schema))
+					.innerRadius(computePieChartInnerRadius("ch-gender", pbi.schema))
+					.addElementDropShadow("g.pie-slice path", {"dx": 2, "dy": 2, "std": 1}, "slices")
+					.addElementDropShadow("text.pie-slice", {"dx": 2, "dy": 2, "std": 1.5}, "labels")
+					.on("preRender", function (chart) {
+						chart.height(computeChartHeight(chart.anchorName(), pbi.schema))
+						chart.width($("#" + chart.anchorName()).width())
+						chart.transitionDuration(computeChartTransitionDuration(chart.anchorName(), pbi.schema))
+					})
+					.renderlet(function (chart) {
+						chart.selectAll("g.pie-slice path")
+							.style("stroke", computePieSliceStrokeColor(chart.anchorName(), pbi.schema))
+							.style("stroke-width", computePieSliceStrokeWidth(chart.anchorName(), pbi.schema));
+						chart.selectAll("g.pie-slice")
+							.on('mouseover.tip', function (d, i) {chGenderTip.show(d, this);})
+							.on('mouseout.tip', chGenderTip.hide);
+						chart.selectAll("text.pie-slice")
+							.on('mouseover.tip', function (d, i) {chGenderTip.show(d, this);})
+							.on('mouseout.tip', chGenderTip.hide);
+						chart.select("g").call(chGenderTip);
+					})
+					.on("postRender", function (chart) {
+						addChartTitle(chart.anchorName(), pbi.schema);
+					})
+				;
+				var chGenderTip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<span class='tip-key'>" + genderLabels[d.data.key] + ":</strong> <span class='tip-value'>" + formatImpressions(d.value) + "</span>";
+					});
+
+				// Pie chart.
+				// var: chAge
+				// ID: ch-age
+
+				chAge = dc.pieChart("#ch-age")
+					.dimension(dimActionsByAge)
+					.group(metActionsByAge)
+					.ordering(pbi.ordering.valueDesc)
+					.colorAccessor(function (d) {
+						return d.data.key;
+					})
+					.colorCalculator(cAge)
+					.label(function (d) {
+						return ageLabels[d.data.key];
+					})
+					.renderTitle(false)
+					.renderChartDownloadImageButton(false)
+					.radius(computePieChartRadius("ch-age", pbi.schema))
+					.innerRadius(computePieChartInnerRadius("ch-age", pbi.schema))
+					.addElementDropShadow("g.pie-slice path", {"dx": 2, "dy": 2, "std": 1}, "slices")
+					.addElementDropShadow("text.pie-slice", {"dx": 0, "dy": 0, "std": 2, "height": "150%", "width": "150%"}, "labels")
+					.minAngleForLabel(0.25)
+					.on("preRender", function (chart) {
+						chart.height(computeChartHeight(chart.anchorName(), pbi.schema))
+						chart.width($("#" + chart.anchorName()).width())
+						chart.transitionDuration(computeChartTransitionDuration(chart.anchorName(), pbi.schema))
+					})
+					.renderlet(function (chart) {
+						chart.selectAll("g.pie-slice path")
+							.style("stroke", computePieSliceStrokeColor(chart.anchorName(), pbi.schema))
+							.style("stroke-width", computePieSliceStrokeWidth(chart.anchorName(), pbi.schema));
+						chart.selectAll("g.pie-slice")
+							.on('mouseover.tip', function (d, i) {chAgeTip.show(d, this);})
+							.on('mouseout.tip', chAgeTip.hide);
+						chart.selectAll("text.pie-slice")
+							.on('mouseover.tip', function (d, i) {chAgeTip.show(d, this);})
+							.on('mouseout.tip', chAgeTip.hide);
+						chart.select("g").call(chAgeTip);
+					})
+					.on("postRender", function (chart) {
+						addChartTitle(chart.anchorName(), pbi.schema);
+					})
+				;
+				var chAgeTip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<span class='tip-key'>" + ageLabels[d.data.key] + ":</strong> <span class='tip-value'>" + formatImpressions(d.value) + "</span>";
+					});
+
+				// Dashboard row 3.
+
+				// Row chart (bar chart).
+				// var: chCampaign
+				// ID: ch-campaign
+
+				chCampaign = pbi.chart.rowChart("#ch-campaign")
+					.dimension(dimCampaignPerformance)
+					.group(metCampaignPerformance)
+					.valueAccessor(function (p) {
+						return p["value"]["sumRatio"];
+					})
+					.label(function (d) {
+						return campaignLabels[d.key];
+					})
+					.renderTitle(false)
+					.elasticX(true)
+					.width(450)
+					.ordering(function (d) {
+						return -d.value["sumRatio"];
+					})
+					.colorAccessor(function (d) {
+						return d.key;
+					})
+					.colorCalculator(cCampaign)
+					.addElementDropShadow("g.row rect", {"std": 0.25})
+					.on("preRender", function (chart) {
+						chart.height(computeChartHeight(chart.anchorName(), pbi.schema))
+						chart.width($("#" + chart.anchorName()).width())
+						chart.margins(computeChartMargins(chart.anchorName(), pbi.schema))
+						chart.labelOffsetX(computeLabelOffsetX(chart.anchorName(), pbi.schema))
+						chart.labelOffsetY(computeLabelOffsetY(chart.anchorName(), pbi.schema))
+						chart.transitionDuration(computeChartTransitionDuration(chart.anchorName(), pbi.schema))
+					})
+					.renderlet(function (chart) {
+
+						chart.selectAll("g.row")
+							.on('mouseover.tip', function (d, i) {chCampaignTip.show(d, this);})
+							.on('mouseout.tip', chCampaignTip.hide);
+
+						chart.select("g").call(chCampaignTip);
+
+					})
+					.on("postRender", function (chart) {
+						addChartTitle(chart.anchorName(), pbi.schema);
+					});
+				chCampaign.xAxis().tickFormat(formatCTR);
+				var chCampaignTip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<span class='tip-key'>" + campaignLabels[d.key] + ":</strong> <span class='tip-value'>" + chCampaign.xAxis().tickFormat()(chCampaign.valueAccessor()(d)) + "</span>";
+					});
+
+				// // Route count.
+				// dc.dataCount("#ch-route-count")
+				// 	.dimension(ndx)
+				// 	.group(all)
+				// 	.renderlet(function (chart) {
+				// 		var filterCountSelector = ".filter-count";
+				// 		var resetAllSelector = ".reset-all";
+				// 		var filteredRecordCount = all.value();
+				// 		var totalRecordCount = ndx.size();
+
+				// 		if (filteredRecordCount < totalRecordCount) {
+				// 			$(filterCountSelector).removeClass("not-filtered");
+				// 			$(filterCountSelector).addClass("filtered");
+				// 			$(resetAllSelector).removeClass("disabled");
+				// 		} else {
+				// 			$(filterCountSelector).removeClass("filtered");
+				// 			$(filterCountSelector).addClass("not-filtered");
+				// 			$(resetAllSelector).addClass("disabled");
+				// 		}
+				// 	});
+
+				// // Driver count.
+				// chDriverCount = pbi.chart.dimensionDataCount("#ch-driver-count")
+				// 	.dimension(metDriverCountAll)
+				// 	.group(metDriverCount)
+				// 	.valueAccessor(function (d) {
+				// 		return d.size();
+				// 	});
+
+				// // Claim count.
+				// chClaimCount = pbi.chart.dimensionDataCount("#ch-claim-count")
+				// 	.dimension(metClaimCountAll)
+				// 	.group(metClaimCount)
+				// 	.valueAccessor(function (d) {
+				// 		return d.size();
+				// 	});
+				
+				end = new Date().getTime();
+				console.log("Finished set up in " + ((end - start) / 1000) + " seconds.");
+				start = new Date().getTime();
+				dc.renderAll();
+				end = new Date().getTime();
+				console.log("Finished rendering in " + ((end - start) / 1000) + " seconds.");
+
+				fadeInAllCharts();
+
+			})
+
+		</script>
+	</body>
+</html>

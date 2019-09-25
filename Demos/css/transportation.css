@@ -1,0 +1,37 @@
+.dc-chart .drill-axis-label:hover text {
+	/* Prime purple */
+	text-shadow: #644977 0 0 5px;
+}
+
+.chart-dashboard {
+/*	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 1.0);*/
+/*	box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.3);*/
+	box-shadow: 5px 5px 5px -5px rgba(0, 0, 0, 1);
+}
+
+.chart-dashboard text.pie-slice {
+	stroke: rgb(255,255,255);
+	fill: rgb(255,255,255);
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.btn {
+	box-shadow: 1px 1px 2px -1px rgba(0, 0, 0, 1.0);
+}
+
+#page-title h1 {
+	color: #644977;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+
+}
+
+#top-data-count {
+	font-size: 0.7em;
+}
+
+#top-data-count span {
+	font-size: 0.9em;
+	padding-bottom: 2px;
+	padding-top: 2px;
+}

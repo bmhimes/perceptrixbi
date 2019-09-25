@@ -1,0 +1,1911 @@
+	<html>
+	<head>
+		<title>Insurance Carrier Dashboard - PerceptrixBI Demo - Advanced Business Analytix</title>
+
+		<script type="text/javascript" src="js/colorbrewer.js"></script>
+		<script type="text/javascript" src="js/tinycolor.js"></script>
+		<script type="text/javascript" src="js/tinygradient.js"></script>
+
+		<script type="text/javascript" src="js/jquery-3.1.0.js"></script>
+		<script type="text/javascript" src="js/jquery.tabletojson.js"></script>
+		<script type="text/javascript" src="js/notify.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="js/jquery.gridster.with-extras.js"></script>
+
+		<script type="text/javascript" src="js/bootstrap.js"></script>
+		<script type="text/javascript" src="js/accounting.js"></script>
+		<script type="text/javascript" src="js/clipboard.js"></script>
+		<script type="text/javascript" src="js/pablo.js"></script>
+
+		<script type="text/javascript" src="js/d3.min.js"></script>
+		<script type="text/javascript" src="js/d3tip.js"></script>
+		<script type="text/javascript" src="js/crossfilter.js"></script>
+		<script type="text/javascript" src="js/dc.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="css/jquery.gridster.css" />
+		<link rel="stylesheet" type="text/css" href="css/dc.css" />
+		<link rel="stylesheet" type="text/css" href="css/d3tip.css" />
+		<link rel="stylesheet" type="text/css" href="css/poc.css" />
+
+		<script type="text/javascript" src="js/perceptrixbi.js"></script>
+		<script type="text/javascript" src="js/minimal.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/minimal.css" />
+	</head>
+	<body>
+		<nav id="top" class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+				<div id="page-title" class="row">
+					<div class="col-md-4 col-md-push-4">
+						<h1>Insurance Carrier Dashboard</h1>
+					</div>
+					<div class="col-md-4 col-md-pull-4">
+						<div id="data-count" class="dc-data-count">
+							<span class="filter-count badge not-filtered"></span> selected out of <span class="total-count badge"></span> records. <a href="#" id="navbar-reset-all" class="btn btn-danger reset-all disabled"><span class="glyphicon glyphicon-refresh"></span>Reset All</a>
+							<!-- <a href="#" id="navbar-save-layout" class="btn btn-primary"><span class="glyphicon glyphicon-save-file"></span>Save<br />Layout</a>
+							<a href="#" id="navbar-restore-layout" class="btn btn-primary"><span class="glyphicon glyphicon-open-file"></span>Restore<br />Layout</a> -->
+						</div>
+					</div>
+					<div  id="dashboard-nav" class="col-md-4">
+						<ul class="nav navbar-nav nav-pills">
+					        <li><a href="javascript:window.scrollTo(0,0);">Dashboard<span class="sr-only">(current)</span></a></li>
+					        <li><a href="#row-dashboard-3">Detail</a></li>
+					    </ul>
+						<a id="simulate-real-time" class="btn btn-primary" href="#"><span class="glyphicon glyphicon-play"></span>Simulate Real-Time</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<nav class="navbar navbar-default navbar-fixed-bottom">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<p class="navbar-text">Powered by</p>
+					<a class="navbar-brand" href="#">
+						<img id="navbar-platform-logo" alt="PerceptrixBI" src="img/PerceptrixBI Logo.png">
+					</a>
+					<p class="navbar-text"><small><i>The business intelligence platform of the Advanced Business Analytix enterprise software suite.</i></small></p>
+				</div>
+				<img id="navbar-company-logo" alt="Advanced Business Analytix" src="img/logo horizontal - name only.png" class="navbar-brand pull-right" data-clipboard-action="copy" data-clipboard-target="#navbar-company-logo" />
+			</div>
+		</nav>
+
+		<div id="main" class="container-fluid">
+			<!-- <div id="row-dashboard-1" class="row row-dashboard">
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-quote-bar" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-policy-bar" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-premium-bar" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+			</div>
+			<div id="row-dashboard-2" class="row row-dashboard">
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-quote-pie" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-policy-pie" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+				<div class="col-md-4 chart-receptacle">
+					<div id="ch-premium-pie" class="text-center chart-dashboard graph-dashboard panel panel-default">
+					</div>
+				</div>
+			</div> -->
+			<div id="dashboard-grid" class="gridster">
+				<div id="ch-quote-bar" class="text-center chart-dashboard graph-dashboard panel panel-default" data-sizey="2" data-sizex="3" data-col="1" data-row="1">
+				</div>
+				<div id="ch-policy-bar" class="text-center chart-dashboard graph-dashboard panel panel-default" data-sizey="2" data-sizex="3" data-col="4" data-row="1">
+				</div>
+				<div id="ch-premium-bar" class="text-center chart-dashboard graph-dashboard panel panel-default" data-sizey="2" data-sizex="3" data-col="7" data-row="1">
+				</div>
+				<div id="ch-quote-pie" class="text-center chart-dashboard graph-dashboard panel panel-default" data-sizey="2" data-sizex="3" data-col="1" data-row="3">
+				</div>
+				<div id="ch-policy-pie" class="text-center chart-dashboard graph-dashboard panel panel-default" data-sizey="2" data-sizex="3" data-col="4" data-row="3">
+				</div>
+				<div id="ch-premium-pie" class="text-center chart-dashboard graph-dashboard panel panel-default" data-sizey="2" data-sizex="3" data-col="7" data-row="3">
+				</div>
+			</div>
+			<div id="row-dashboard-3" class="row row-dashboard">
+				<div class="col-md-12">
+					<div id="tb-rows-header-wrapper">
+						<div id="tb-rows-header" class="row"  data-spy="affix">
+							<div id="tb-rows-export" class="col-md-3 table-export">
+								<a id="tb-rows-download-csv" class="table-export btn btn-primary">
+									<span class="glyphicon glyphicon-download-alt"></span>Export to Excel
+								</a>
+								<a id="tb-rows-copy-csv" class="table-export btn btn-primary" alt="Copy CSV to Clipboard">
+									<span class="glyphicon glyphicon-copy"></span>Copy
+								</a>
+							</div>
+							<div id="tb-rows-title" class="col-md-9 inset3 center-text table-title">
+								<h4>Policy Administration System Records</h4>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div id="tb-rows-anchor" class="col-md-12 chart-dashboard">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+
+			pbi.extendSettings(pbi.environment, minimalPBI.environment)
+			pbi.extendSettings(pbi.schema, minimalPBI.schema)
+
+			$(document).ready(function () {
+				dc.renderAll();
+				fadeInAllCharts();
+			});
+			
+			// Format code definitions.		
+			
+			var fmtDate = "%m/%d/%y";
+
+			// Data processing functions.
+
+			var convertYearFractionToQuarter = function (yearFraction) {
+				var output = "";
+				if (yearFraction >= 0 && yearFraction < 0.25) {
+					output = "Q1";
+				} else if (yearFraction >= 0.25 && yearFraction < 0.5) {
+					output = "Q2";
+				} else if (yearFraction >= 0.5 && yearFraction < 0.75) {
+					output = "Q3";
+				} else if (yearFraction >= 0.75 && yearFraction < 1.0) {
+					output = "Q4";
+				}
+				return output;
+			};
+
+			var convertYearDecimalToYearQuarter = function (yearDecimal) {
+				var year = Math.trunc(yearDecimal);
+				var quarter = convertYearFractionToQuarter(yearDecimal - year);
+				return year + quarter;
+			};
+
+			var parseFastFloat = function (sourceString) {
+				return +sourceString;
+			};
+
+			var identity = function (d) {
+				return d;
+			};
+
+			var parseField = function (x, field, schema) {
+				x[field] = schema["fields"][field]["parsingFunction"](x[field]);
+			};
+
+			var displayField = function (field, schema) {
+				return function (d) {
+					return schema["fields"][field]["displayFunction"](d[field]);
+				};
+			};
+
+			var field = function (f) {
+				return function (d) {
+					return d[f];
+				};
+			};
+
+			var getDimDistinctValues = function (dim) {
+				var output = [];
+				var grouping = dim.group().all();
+				for (valueIndex = 0; valueIndex < grouping.length; valueIndex++) {
+					output[valueIndex] = grouping[valueIndex].key;
+				}
+				return output;
+			};
+
+			var simulationEnabled = false;
+			var simulatedRecordsAdded = 0;
+
+			var simulationLoop = function (ndx) {
+
+				var delay = Math.max(0, d3.random.normal(4000, 500)());
+				
+				if (simulationEnabled == true) {
+					addNewSimulatedRow(ndx);
+					simulatedRecordsAdded += 1;
+					$.notify(
+						"New data received. (#" + simulatedRecordsAdded + ")", 
+						{
+							"autoHideDelay": 2000,
+							"className": "success",
+							"globalPosition": "bottom center"
+						});
+					setTimeout(function () {simulationLoop(ndx)}, delay);
+				}
+			}
+
+			var addNewSimulatedRow = function (ndx) {
+				// get today's date
+				// choose quote or policy
+				// quote
+					// get next quote id
+				// policy
+					// get next policy id
+					// generate premium amount
+
+				var type = ["quote", "quote", "policy"][Math.floor(Math.random() * 3)];
+				var LOB = ["A", "B", "C", "D"][Math.floor(Math.random() * 4)];
+				var quoteID;
+				var policyID;
+				var premium;
+				if (type == "quote") {
+					quoteID = "-1";
+					policyID = "N/A";
+					premium = "";
+				} else {
+					quoteID = "N/A";
+					policyID = "-1";
+					premium = Math.floor(Math.random() * 500) + 1000;
+				}
+
+				ndx.add([{
+					"id": -1,
+					"Quote_ID": quoteID,
+					"Policy_ID": policyID,
+					"Annual_Premium": premium,
+					"LOB": LOB,
+					"Year": 2016,
+					"Quarter": "Q3",
+					"Date": d3.time.format("%m/%d/%Y").parse("09/30/16")
+				}]);
+
+				dc.redrawAll();
+
+			};
+
+			// Color functions.
+
+			var d3OrdinalColorAccessor = function (colorScale) {
+					return function (d) {
+						var dKey
+						if (d.hasOwnProperty("data")) {
+							dKey = d.data.key
+						} else {
+							dKey = d.key
+						}
+						return colorScale.domain().indexOf(dKey);
+					};
+				};
+
+			var chartValueIDColorAccessor = function (val, colors, chartID) {
+				return colors.indexOf("url(#" + chartID + "-" + pbi.valueToID(val));
+			};
+
+			// Chart building functions.
+
+			var buildTableBox = function(id, parent, fields, schema) {
+				// Create table element for table box.
+				$("<table></table>").appendTo("#" + parent);
+
+				var newTableBox = $("#" + parent + " table");
+				newTableBox
+					.addClass("table table-hover table-striped")
+					.attr("id", id);
+
+				// Add table header and header row.
+				$("<thead></thead>").appendTo("#" + id);
+				$("<tr></tr>").appendTo("#" + id + " thead");
+				var trow = $("#" + id + " thead tr");
+
+				// Add header cell for each field.
+				$.each(fields, function(index, field) {
+
+					// Add header cell.
+					$("<td id='" + id + "-" + field + "'>" + schema["fields"][field]["label"] + "</td>").appendTo(trow);
+					
+				});
+			};
+
+			var addChartTitle = function(chartID, schema) {
+
+				var chartSelector = "#" + chartID;
+				var chartTitleID = chartID + "-title";
+				var chartTitleSelector = "#" + chartTitleID;
+
+				if (d3.select(chartTitleSelector).size() == 0) {
+					d3.select(chartSelector).select("svg").append("text")
+						.attr("id", chartTitleID)
+						.attr("y",  2 + computeChartTitleHeight(chartID, schema) / 2)
+						.attr("class", "chart-title")
+						.text(schema.charts[chartID].chartTitle);
+
+					d3.select(chartTitleSelector)
+						.attr(
+							"x", 
+							$(chartSelector + " svg").width() / 2
+							- $(chartTitleSelector).width() / 2
+						);
+				}
+
+				
+			};
+
+			var computeChartProperty = function (chartID, property, schema) {
+				return pbi.coalesce([
+					schema.charts[chartID][property],
+					schema.defaultSettings.chart[schema.charts[chartID].chartType][property],
+					schema.defaultSettings.chart[property]
+				]);
+			};
+
+			var computeBarStrokeColor = function (chartID, schema) {
+				return computeChartProperty(chartID, "barStrokeColor", schema);
+			};
+
+			var computeBarStrokeWidth = function (chartID, schema) {
+				return computeChartProperty(chartID, "barStrokeWidth", schema);
+			};
+
+			var computeChartHeight = function (chartID, schema) {
+				return computeChartProperty(chartID, "chartHeight", schema);
+			};
+
+			var computeChartMarginBottom = function (chartID, schema) {
+				return pbi.coalesce([
+					schema.defaultSettings.chart.chartMarginBottom
+				]);
+			};
+
+			var computeChartMarginLeft = function (chartID, schema) {
+				return pbi.coalesce([
+					schema.defaultSettings.chart.chartMarginLeft
+				]);
+			};
+
+			var computeChartMarginRight = function (chartID, schema) {
+				return pbi.coalesce([
+					schema.defaultSettings.chart.chartMarginRight
+				]);
+			};
+
+			var computeChartMargins = function (chartID, schema) {
+				return {
+					"bottom": computeChartMarginBottom(chartID, schema),
+					"left": computeChartMarginLeft(chartID, schema),
+					"right": computeChartMarginRight(chartID, schema),
+					"top": computeChartMarginTop(chartID, schema)
+				};
+			};
+
+			var computeChartMarginTop = function (chartID, schema) {
+				var baseMargin = pbi.coalesce([
+					schema.defaultSettings.chart.chartMarginTop
+				]);
+
+				var titleHeight = computeChartTitleHeight(chartID, schema);
+
+				var finalMargin = baseMargin + titleHeight;
+
+				return finalMargin;
+			};
+
+			var computeChartTitleHeight = function (chartID, schema) {
+				return pbi.coalesce([
+					schema.defaultSettings.chart.chartTitleHeight
+				]);
+			};
+
+			var computeGap = function (chartID, schema) {
+				return computeChartProperty(chartID, "gap", schema);
+			};
+
+			var computeLabelOffsetX = function (chartID, schema) {
+				return computeChartProperty(chartID, "labelOffsetX", schema);
+			};
+
+			var computeLabelOffsetY = function (chartID, schema) {
+				return computeChartProperty(chartID, "labelOffsetY", schema);
+			};
+
+			var computePieChartRadius = function (chartID, schema) {
+				return computeChartProperty(chartID, "radius", schema);
+			};
+
+			var computePieChartInnerRadius = function (chartID, schema) {
+				return computeChartProperty(chartID, "innerRadius", schema);
+			};
+
+			var computeRowChartElasticX = function (chartID, schema) {
+				return pbi.coalesce([
+					schema.charts[chartID].elasticX,
+					schema.defaultSettings.chart["row"].elasticX
+				]);
+			};
+
+			var computePieSliceDeselectedStrokeWidth = function (chartID, schema) {
+				return computeChartProperty(chartID, "pieSliceDeselectedStrokeWidth", schema);
+			};
+
+			var computePieSliceSeelectedStrokeWidth = function (chartID, schema) {
+				return omputeChartProperty(chartID, "pieSliceSelectedStrokeWidth", schema);
+			};
+
+			var computePieSliceStrokeColor = function (chartID, schema) {
+				return computeChartProperty(chartID, "pieSliceStrokeColor", schema);
+			};
+
+			var computePieSliceStrokeWidth = function (chartID, schema) {
+				return computeChartProperty(chartID, "pieSliceStrokeWidth", schema);
+			};
+
+			var getMaxSizeDimension = function (jqSelector) {
+				return Math.max(
+					$(jqSelector).first().height(),
+					$(jqSelector).first().width()
+				);
+			};
+
+			var getMinSizeDimension = function (jqSelector) {
+				return Math.min(
+					$(jqSelector).first().height(),
+					$(jqSelector).first().width()
+				);
+			};
+
+			// SVG functions.
+
+			// This function assumes the existence of a defs element with id "perceptrix-svg-defs".
+			// WIP.
+			var buildSVGRadialGradientScaleTemplate = function (templateName, d3OrdinalScale) {
+				
+				var templateID = "grad-template-" + templateName;
+
+				var defs = d3.select("#perceptrix-svg-defs");
+
+				var gradients = {};
+
+				var domain = d3OrdinalScale.domain();
+
+				for (domainValIndex = 0; domainValIndex < domain.length; domainValIndex++) {
+
+					gradients[domain[domainValIndex]] = defs.append("radialGradient")
+						.attr("id", templateID + "-" +	pbi.valueToID(domain[domainValIndex]))
+						.attr("gradientUnits", "userSpaceOnUse")
+						.attr("cx", "50%")
+						.attr("cy", "50%")
+						// .attr("r", getMaxSizeDimension(svgSelector) / 2)
+						.attr("r", 0)
+						.attr("fx", "50%")
+						.attr("fy", "50%")
+						// .attr(
+						// 	'gradientTransform', 
+						// 	pbi.makeTranslationString(
+						// 		-$(svgSelector).width() / 2, 
+						// 		-$(svgSelector).height() / 2
+						// ))
+						.attr(
+							"gradientTransform", 
+							"translate(0,0)"
+						)
+						;
+
+					gradients[domain[domainValIndex]].append("stop")
+						.attr(
+							"offset", 
+							// computePieChartInnerRadius(chart.anchorName(), schema) /
+							// getMinSizeDimension(svgSelector)
+							0
+						)
+						// .style("stop-color", d3.rgb(cLOBScale("A")).darker(3));
+						.style("stop-color", "#000000");
+
+					gradients[domain[domainValIndex]].append("stop")
+						.attr(
+							"offset", 
+							// 0.2
+							// * (
+							// 	getMinSizeDimension(svgSelector)
+							// 	- computePieChartInnerRadius(chart.anchorName(), schema)
+							// ) /
+							// getMinSizeDimension(svgSelector)
+							// + computePieChartInnerRadius(chart.anchorName(), schema) /
+							// getMinSizeDimension(svgSelector)
+							0
+						)
+						// .style("stop-color", d3.rgb(cLOBScale("A")).darker(1));
+						.style("stop-color", "#FFFFFF");
+
+					gradients[domain[domainValIndex]].append("stop")
+						.attr(
+							"offset", 
+							// 0.8
+							// * (
+							// 	getMinSizeDimension(svgSelector)
+							// 	- computePieChartInnerRadius(chart.anchorName(), schema)
+							// ) /
+							// getMinSizeDimension(svgSelector)
+							// + computePieChartInnerRadius(chart.anchorName(), schema) /
+							// getMinSizeDimension(svgSelector)
+							0
+						)
+						// .style("stop-color", d3.rgb(cLOBScale("A")).brighter(1));
+						.style("stop-color", "#000000");
+				}
+
+					
+
+			};
+
+			var buildSVGRadialGradientScale = function (chartID, d3OrdinalScale, schema) {
+				// Build jQuery selector for convenience.
+				var svgSelector = "#" + chartID + " > svg";
+
+				// Build jQuery selectors for convenience.
+				var defsID = chartID + "-defs";
+				var defsSelector = "#" + defsID;
+
+				// Determine color domain.
+				var domain = d3OrdinalScale.domain();
+
+				var gradients = {};
+
+				// Ensure that SVG defs exists.
+				if ($(defsSelector).length == 0) {
+					d3.select(svgSelector).append("defs")
+						.attr("id", defsID);
+				}
+
+				// Acquire defs.
+				var defs = d3.select(defsSelector);
+
+				// Acquire chart.
+				var chart = dc.getChartByAnchorName(chartID);
+
+				var radius = chart.radius();
+				var innerRadius = chart.innerRadius();
+				var chartWidth = chart.width();
+				var chartHeight = chart.height();
+
+				// Offsets are % of mean of svg dimensions.
+
+				var stopOffsets = [];
+				stopOffsets[0] = innerRadius / (d3.mean([chartWidth, chartHeight]) / 2);
+				stopOffsets[2] = 0.95 * radius / (d3.mean([chartWidth, chartHeight]) / 2);
+				// stopOffsets[1] = stopOffsets[0] + 0.33 * (stopOffsets[2] - stopOffsets[0]);
+
+				for (domainValIndex = 0; domainValIndex < domain.length; domainValIndex++) {
+
+					var gradientID = chartID + "-" + pbi.valueToID(domain[domainValIndex]);
+					var rgb = d3.rgb(d3OrdinalScale(domain[domainValIndex]));
+					var stopColors = [];
+					stopColors[0] = rgb.darker(1.5);
+					// stopColors[1] = rgb.darker(1);
+					stopColors[2] = rgb.brighter(1);
+					
+
+					if ($("#" + gradientID).length != 0) {
+						$("#" + gradientID).remove();
+					}
+					
+					gradients[domain[domainValIndex]] = defs.append("radialGradient")
+						.attr("id", gradientID)
+						.attr("gradientUnits", "userSpaceOnUse")
+						.attr("cx", "50%")
+						.attr("cy", "50%")
+						.attr("r", "50%")
+						.attr("fx", "50%")
+						.attr("fy", "50%")
+						.attr(
+							'gradientTransform', 
+							pbi.makeTranslationString(
+								-chartWidth / 2, 
+								-chartHeight / 2
+							)
+						)
+						.attr("spreadMethod", "pad");
+
+					gradients[domain[domainValIndex]].append("stop")
+						.attr(
+							"offset", 
+							stopOffsets[0]
+						)
+						.style("stop-color", stopColors[0]);
+
+					// gradients[domain[domainValIndex]].append("stop")
+					// 	.attr(
+					// 		"offset", 
+					// 		stopOffsets[1]
+					// 	)
+					// 	.style("stop-color", stopColors[1]);
+
+					gradients[domain[domainValIndex]].append("stop")
+						.attr(
+							"offset", 
+							stopOffsets[2]
+						)
+						.style("stop-color", stopColors[2]);
+
+				}
+			};
+
+			var buildRowChartSVGLinearGradientScale = function (chartID, d3OrdinalScale, schema) {
+				// Build jQuery selector for convenience.
+				var svgSelector = "#" + chartID + " > svg";
+
+				// Build jQuery selectors for convenience.
+				var defsID = chartID + "-defs";
+				var defsSelector = "#" + defsID;
+
+				// Determine color domain.
+				var domain = d3OrdinalScale.domain();
+
+				var gradients = [];
+
+				// Ensure that SVG defs exists.
+				if ($(defsSelector).length == 0) {
+					d3.select(svgSelector).append("defs")
+						.attr("id", defsID);
+				}
+
+				// Acquire defs.
+				var defs = d3.select(defsSelector);
+
+				for (domainValIndex = 0; domainValIndex < domain.length; domainValIndex++) {
+
+					gradients[domain[domainValIndex]] = defs.append("linearGradient")
+						.attr("id", chartID + "-" +	pbi.valueToID(domain[domainValIndex]));
+
+					gradients[domain[domainValIndex]].append("stop")
+						.attr(
+							"offset", 
+							"0%"
+						)
+						.style("stop-color", d3.rgb(d3OrdinalScale(domain[domainValIndex])));
+
+					gradients[domain[domainValIndex]].append("stop")
+						.attr(
+							"offset", 
+							"100%"
+						)
+						.style("stop-color", d3.rgb(d3OrdinalScale(domain[domainValIndex])).brighter(1));
+
+				}
+			};
+
+			var addChartCSVDownloadButton = function (chartID) {
+				chartResetButtonID = chartID + "-csv-download";
+
+				if ($("#" + chartResetButtonID).length == 0) {
+					$("#" + chartID).before("<a id='" + chartResetButtonID + "'></a>");
+					$("#" + chartResetButtonID)
+						.fadeTo(0,0)
+						.text("Excel")
+						.addClass("btn btn-primary chart-csv-dl")
+						.prepend("<span class='glyphicon glyphicon-download-alt' aria-hidden='true'></span>");
+				}	
+			}
+
+			var convertDomainToIDs = function (chartID, d3OrdinalScale) {
+
+				var domain = d3OrdinalScale.domain();
+
+				var output = [];
+
+				for (domainValIndex = 0; domainValIndex < d3OrdinalScale.domain().length; domainValIndex++) {
+					output[domainValIndex] = "url(#" + chartID + "-" + pbi.valueToID(domain[domainValIndex]) + ")";
+				}
+
+				return output;
+			};
+
+			var createSVGDefinitionsStorage = function () {
+				return d3.select("body").append("svg").append("defs")
+					.attr("id", "perceptrix-svg-defs");
+			};
+
+			var hideOverlappingHorizontalAxisLabels = function (chart) {
+				
+				var skip = false;
+
+				$("#" + chart.anchorName() + " g.tick").each(function() {
+
+					if (skip == false) {
+
+						// Determine end of current axis label.
+						var endOfTextField = $(this).offset().left + $(this).find("text").width();
+
+						// Acquire next axis label.
+						var nextText = $(this).next("g.tick").find("text");
+
+						// Use the SVG edge for the last label.
+						var nextStart = (nextText.length > 0) ? nextText.offset().left : $("#" + chart.anchorName() + " > svg").offset().left + $("#" + chart.anchorName() + " > svg").width();
+
+						if (endOfTextField > nextStart) {
+
+							// Hide the overlapping label.
+							$(this).find("text").addClass("hidden-axis-label");
+
+							// Skip the next label.
+							skip = true;
+						}
+
+					} else {
+						// Process the next label.
+						skip = false;
+					}
+
+				});
+			};
+
+			var fadeOutAllCharts = function () {
+				$(".chart-dashboard").fadeTo(400, 0)
+			};
+
+			var fadeInAllCharts = function () {
+				var callbacks = $.Callbacks();
+				callbacks.add($(".chart-dashboard").fadeTo(750, 0.05))
+				callbacks.add($(".chart-dashboard").fadeTo(1500, 1))
+				callbacks.fire();
+			}
+
+			var resetAll = function() {
+				var callbacks = $.Callbacks();
+				callbacks.add(fadeOutAllCharts);
+				callbacks.add(dc.filterAll());
+				callbacks.add(dc.renderAll());
+				callbacks.add(fadeInAllCharts);
+				callbacks.fire();
+			};
+
+			// Ordering functions.
+
+			var orderingLatestYearQuarterYOY = function (latestYearQuarter) {
+				return function (d) {
+					return (latestYearQuarter - d.key) % 1 - d.key * 0.000001;
+				};
+			};
+
+			// Data export functions.
+
+			function convertJSONToCSV(JSONData, headerRowEnabled) {
+
+				if (headerRowEnabled == undefined) {
+					headerRowEnabled = true;
+				}
+
+				//If JSONData is not an ob JSON.parse will parse the JSON string in an Object
+				var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+				
+				var CSV = '';    
+
+				//This condition will generate the Label/Header
+				if (headerRowEnabled) {
+					var row = "";
+					
+					//This loop will extract the label from 1st index of on array
+					for (var index in arrData[0]) {
+						
+						//Now convert each value to string and comma-seprated
+						row += index + ',';
+					}
+
+					row = row.slice(0, -1);
+					
+					//append Label row with line break
+					CSV += row + '\r\n';
+				}
+				
+				//1st loop is to extract each row
+				for (var i = 0; i < arrData.length; i++) {
+					var row = "";
+					
+					//2nd loop will extract each column and convert it in string comma-seprated
+					for (var index in arrData[i]) {
+						row += '"' + arrData[i][index] + '",';
+					}
+
+					row.slice(0, row.length - 1);
+					
+					//add a line break after each row
+					CSV += row + '\r\n';
+				}
+
+				if (CSV == '') {        
+					console.log("Cannot convert invalid JSON data to CSV.");
+					return;
+				}
+
+				return CSV;
+				
+			}
+
+			var promptFileDownload = function (fileName, type, fileData) {
+
+				var uriPrefix = "";
+				if (type.toLocaleLowerCase() == "csv") {
+					uriPrefix = "data:text/csv;charset=utf-8,";
+					fileData = escape(fileData);
+				}
+
+				var uri = uriPrefix + fileData;
+				
+				// Generate file download link.
+				var link = document.createElement("a");    
+				link.href = uri;
+				
+				// Hide link to prevent affecting layout.
+				link.style = "visibility:hidden";
+				link.download = fileName;
+				
+				//this part will append the anchor tag and remove it after automatic click
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+
+			};
+
+			var promptCSVDownload = function (CSV, reportTitle, writeReportTitleToFile, reportTitleNewLines) {
+				
+				if (reportTitleNewLines == undefined) {
+					reportTitleNewLines = 1;
+				}
+
+				if (writeReportTitleToFile == true) {
+					var titleLines = "\r\n";
+					for (i = 0; i < reportTitleNewLines; i++) {
+						titleLines += "\r\n";
+					}
+					CSV = reportTitle + titleLines + CSV;
+				}
+
+				// Replace spaces with underscores.
+				var fileName = reportTitle.replace(/ /g,"_");   
+				
+				promptFileDownload(fileName, "csv", CSV);
+			}
+
+			var downloadTableAsCSV = function (tableID, reportTitle) {
+
+				$.notify(
+					"Preparing download. Please wait...", 
+					{
+						"autoHideDelay": 5000,
+						"className": "warning",
+						"globalPosition": "bottom center",
+						"clickToHide": true
+					}
+				);
+
+				var tableJSON = $("#" + tableID.replace("#", "")).tableToJSON();
+
+				var csv = convertJSONToCSV(tableJSON, true);
+
+				delete tableJSON;
+
+				$.notify(
+					"Download ready.",
+					{
+						"autoHideDelay": 5000,
+						"className": "success",
+						"globalPosition": "bottom center",
+						"clickToHide": true
+					}
+				);
+
+				promptCSVDownload(csv, reportTitle, true, 2);
+
+			};
+
+			var userOnDemandCopyTableCSVToClipboard	= function (selector, tableID) {
+
+				var copyStart = function () {
+					$.notify(
+						"Copying table to clipboard. Please wait...", 
+						{
+							"autoHideDelay": 5000,
+							"className": "warning",
+							"globalPosition": "bottom center",
+							"clickToHide": true
+						}
+					);
+				};
+
+				var copySuccess = function () {
+					$.notify(
+						"Table now stored in clipboard.",
+						{
+							"autoHideDelay": 5000,
+							"className": "success",
+							"globalPosition": "bottom center",
+							"clickToHide": true
+						}
+					);
+				};
+
+				var copyError = function () {
+					$.notify(
+						"Table could not be stored in clipboard.",
+						{
+							"autoHideDelay": 5000,
+							"className": "error",
+							"globalPosition": "bottom center",
+							"clickToHide": true
+						}
+					);
+				};
+
+				var copy = function () {
+					copyStart();
+					var tableJSON = $("#" + tableID.replace("#", "")).tableToJSON();
+					return convertJSONToCSV(tableJSON, true);
+				}
+
+				copier = new Clipboard(
+					selector,
+					{"text": copy}
+				);
+
+				copier.on("success", copySuccess);
+				copier.on("error", copyError);
+
+				return copier;
+			}
+
+			// Define dataset.
+				var schema = {
+					"fields": {
+						"Quote_ID": {
+							"label": "Quote ID",
+							"parsingFunction": pbi.mapBlankToNA
+						},
+						"Policy_ID": {
+							"label": "Policy ID",
+							"parsingFunction": pbi.mapBlankToNA
+						},
+						"Annual_Premium": {
+							"label": "Annual Premium",
+							"parsingFunction": pbi.unformatNonnullCurrency,
+							"displayFunction": pbi.formatNonnullCurrency
+						},
+						"Date": {
+							"label": "Date",
+							"parsingFunction": d3.time.format("%m/%d/%Y").parse,
+							"displayFunction": d3.time.format(fmtDate)
+						},
+						"LOB": {
+							"label": "LOB",
+							"parsingFunction": identity
+						},
+						"Quarter": {
+							"label": "Quarter",
+							"parsingFunction": identity
+						},
+						"Year": {
+							"label": "Year",
+							"parsingFunction": parseFastFloat
+						}
+					},
+					"charts": {
+						"ch-quote-bar": {
+							"chartTitle": "Quotes by Year-Quarter",
+							"chartType": "row"
+						},
+						"ch-quote-pie": {
+							"chartTitle": "Quotes by LOB",
+							"chartType": "pie"
+						},
+						"ch-policy-bar": {
+							"chartTitle": "Policies by Year-Quarter",
+							"chartType": "row"
+						},
+						"ch-policy-pie": {
+							"chartTitle": "Policies by LOB",
+							"chartType": "pie"
+						},
+						"ch-premium-bar": {
+							"chartTitle": "Premium by Year-Quarter",
+							"chartType": "row"
+						},
+						"ch-premium-pie": {
+							"chartTitle": "Premium by LOB",
+							"chartType": "pie"
+						}
+					},
+					"defaultSettings": {
+						"chart": {
+							"pie": {
+								"chartHeight": 220,
+								"innerRadius": 50,
+								"pieSliceDeselectedStrokeWidth": 1,
+								"pieSliceSelectedStrokeWidth": 3,
+								"pieSliceStrokeColor": "gray",
+								"pieSliceStrokeWidth": 2,
+								"radius": 90
+							},
+							"row": {
+								"barStrokeWidth": 1,
+								"barStrokeColor": "gray",
+								"chartHeight": 220,
+								"elasticX": true,
+								"gap": 3,
+								"labelOffsetX": 5,
+								"labelOffsetY": 12
+							},
+							"chartHeight": 200,
+							"chartTitleHeight": 20,
+							"chartMarginBottom": 30,
+							"chartMarginLeft": 30,
+							"chartMarginRight": 50,
+							"chartMarginTop": 0
+						}
+					},
+					"colors": {
+						"theme": {
+							"Matisse": "#1E5799",
+							"Denim": "#1478B9",
+							"DarkCerulean": "#0A99D9",
+							"Cerulean": "#00BBFA",
+							"Gray": "#D7D7D7",
+							"Cerulean2": "#009DFA",
+							"BrightGreen": "#22FD00",
+							"Yellow": "#DBFF00",
+							"Orange": "#FF7A00"
+						}
+					}
+				};
+			// schema = pbi.schema;
+
+			// fadeOutAllCharts();
+
+			// Enable widget grid.
+			var gridster;
+            	gridster = $("#dashboard-grid").gridster({
+            		autogenerate_stylesheet: true,
+	                min_cols: 9,
+	                min_rows: 4,
+
+	                widget_selector: "#dashboard-grid .graph-dashboard",
+	                widget_base_dimensions: [150, 110],
+	                max_cols: Infinity,
+	                autogrow_cols: true,
+	                widget_margins: [15, 15],
+
+	                shift_widgets_up: false,
+		            shift_larger_widgets_down: false,
+		            collision: {
+		                wait_for_mouseup: true
+		            },
+	                
+
+	                resize: {
+	                    enabled: true,
+	                    max_size: [9,4],
+	                    start: function (e, ui, $widget) {
+	                    	var startingSizeX = $widget.attr("data-sizex");
+	                    	var startingSizeY = $widget.attr("data-sizey");;
+
+	                    	// Store size at the start of resize.
+	                    	$widget.attr("data-startsizex", startingSizeX);
+	                    	$widget.attr("data-startsizey", startingSizeY);
+	                    },
+	                    resize: function (e, ui, $widget) {
+	                 		$widget.css("overflow", "hidden");
+	                    	var chartID = $widget.attr("id");
+	                    	var chart = dc.getChartByAnchorName(chartID);
+	                    	chart.positionChartResetButton();
+	                    	chart.positionChartDownloadImageButton();
+	                    },
+	                    stop: function(e, ui, $widget) {
+	                    	var endingSizeX = $widget.attr("data-sizex");
+	                    	var endingSizeY = $widget.attr("data-sizey");;
+	                    	var startingSizeX = $widget.attr("data-startsizex");
+	                    	var startingSizeY = $widget.attr("data-startsizey");
+
+	                    	// Remove starting size attributes.
+	                    	$widget.removeAttr("data-startsizex");
+	                    	$widget.removeAttr("data-startsizey");
+
+	                    	var chartID = $widget.attr("id");
+	                    	var chart = dc.getChartByAnchorName(chartID);
+	                    	chart.positionChartResetButton();
+	                    	chart.positionChartDownloadImageButton();
+	                    	if (endingSizeX != startingSizeX || endingSizeY != startingSizeY) {
+	                    		var transitionDuration = chart.transitionDuration();
+	                    		chart.transitionDuration(0);
+	                    		chart.render();
+	                    		chart.transitionDuration(transitionDuration);
+	                    	}
+	                    	$widget.css("overflow", "");
+	                    }
+	                }
+	            }).data('gridster');
+
+			var originalLayout = [[{"col":1,"row":1,"size_x":3,"size_y":2}],[{"col":4,"row":1,"size_x":3,"size_y":2}],[{"col":7,"row":1,"size_x":3,"size_y":2}],[{"col":1,"row":3,"size_x":3,"size_y":2}],[{"col":4,"row":3,"size_x":3,"size_y":2}],[{"col":7,"row":3,"size_x":3,"size_y":2}]];
+			var verticalLayout = [[{"col":1,"row":1,"size_x":3,"size_y":2}],[{"col":1,"row":3,"size_x":3,"size_y":2}],[{"col":1,"row":5,"size_x":3,"size_y":2}],[{"col":4,"row":1,"size_x":3,"size_y":2}],[{"col":4,"row":3,"size_x":3,"size_y":2}],[{"col":4,"row":5,"size_x":3,"size_y":2}]];
+			var gridChartList = [$("#ch-quote-bar"), $("#ch-policy-bar"), $("#ch-premium-bar"), $("#ch-quote-pie"), $("#ch-policy-pie"), $("#ch-premium-pie")];
+			var savedLayout = [];
+			$("#navbar-save-layout").click(function() {
+				for (chartIndex = 0; chartIndex < 6; chartIndex++) {
+					savedLayout[chartIndex] = gridster.serialize(gridChartList[chartIndex]);					
+				}
+			});
+			$("#navbar-restore-layout").click(function() {
+
+				if (savedLayout != []) {
+					// for (chartIndex = 0; chartIndex < 6; chartIndex++) {
+					// 	var currentPosition = gridster.serialize()[chartIndex];
+					// 	var savedPosition = savedLayout[chartIndex];
+					// 	var mutatedChart = gridChartList[chartIndex];
+					// 	console.log("chartIndex = " + chartIndex)
+					// 	console.log("savedPosition = " + JSON.stringify(savedPosition))
+					// 	console.log("currentPosition + " + JSON.stringify(currentPosition))
+					// 	if (currentPosition != savedPosition) {
+					// 		gridster.mutate_widget_in_gridmap(mutatedChart, currentPosition, savedPosition);
+					// 		if (currentPosition.size_x != savedPosition.size_x || currentPosition.size_y != savedPosition.size_y) {
+					// 			dc.getChartByAnchorName(mutatedChart.attr("id")).render();
+					// 		}
+							
+					// 	}
+						
+					// }
+					
+					gridster.remove_all_widgets();
+					for (chartIndex = 0; chartIndex < 6; chartIndex++) {
+						var savedPosition = savedLayout[chartIndex][0];
+						var mutatedChart = gridChartList[chartIndex];
+						console.log("chartIndex = " + chartIndex)
+						console.log("savedPosition = " + JSON.stringify(savedPosition))
+						
+						gridster.add_widget(mutatedChart, savedPosition.size_x, savedPosition.size_y, savedPosition.col, savedPosition.row);
+					}
+				}
+			})
+
+			var chQuoteBar = dc.rowChart("#ch-quote-bar");
+			var chPolicyBar = dc.rowChart("#ch-policy-bar");
+			var chPremiumBar = dc.rowChart("#ch-premium-bar");
+			var chQuotePie = dc.pieChart("#ch-quote-pie");
+			var chPolicyPie = dc.pieChart("#ch-policy-pie");
+			var chPremiumPie = dc.pieChart("#ch-premium-pie");
+			var tbRows;
+
+			d3.csv("data/data_minimal.csv", function(error, data) {
+				
+				// Process data.
+				id = 0;
+				data.forEach(function(x) {
+					parseField(x, "Quote_ID", schema);
+					parseField(x, "Policy_ID", schema);
+					parseField(x, "Annual_Premium", schema);
+					parseField(x, "Date", schema);
+					parseField(x, "Quarter", schema);
+					parseField(x, "Year", schema);
+					parseField(x, "LOB", schema);
+					x.id = id++;
+
+					// console.log(JSON.stringify(x));
+				});
+
+				// Create crossfilter database from data.
+				var ndx = crossfilter(data);
+				 
+				// Define all grouping.
+				var all = ndx.groupAll();
+
+				// Define fields.
+
+				fQuoteID = field("Quote_ID");
+				fPolicyID = field("Policy_ID");
+				fAnnualPremium = field("Annual_Premium");
+				fDate = field("Date");
+				fLOB = field("LOB");
+				fQuarter = field("Quarter");
+				fYear = field("Year");
+
+				// Define dimenions.
+
+				var dimensions = {};
+
+				var simpleDimDef = function(dim) {
+					newDim = ndx.dimension(field(dim));
+					if (dimensions[dim] == undefined) {
+						dimensions[dim] = [];
+					}
+					dimensions[dim].push(newDim);
+					return newDim;
+				};
+
+				var independentDimDef = function (dim) {
+					return function () {
+						newDim = simpleDimDef(dim);
+						if (dimensions[dim] == undefined) {
+							dimensions[dim] = [];
+						}
+						dimensions[dim].push(newDim);
+						return newDim;
+					};
+				};
+
+				var dimDefYearQuarter = function() {
+					return ndx.dimension(function(d) {
+						quarterNumber = d["Quarter"].substring(1,2)
+						yearFraction = (quarterNumber - 1) / 4.0
+						return d["Year"] + yearFraction;
+					});
+				};
+
+				var dimDate = simpleDimDef("Date");
+				var dimLOB = simpleDimDef("LOB");
+				var dimQuarter = simpleDimDef("Quarter");
+				var dimYear = simpleDimDef("Year");
+				var dimYearQuarter = ndx.dimension(function(d) {
+						quarterNumber = d["Quarter"].substring(1,2)
+						yearFraction = (quarterNumber - 1) / 4.0
+						return d["Year"] + yearFraction;
+					});
+
+				var idimLOB = independentDimDef("LOB");
+				var idimYearQuarter = function () {
+					return ndx.dimension(function(d) {
+						quarterNumber = d["Quarter"].substring(1,2)
+						yearFraction = (quarterNumber - 1) / 4.0
+						return d["Year"] + yearFraction;
+					});
+				};
+
+				// Define metrics.
+				var latestYearQuarter = dimYearQuarter.group().top(1)[0].key;
+				var dimQuoteCountByLOB = simpleDimDef("LOB");
+				var metQuoteCountByLOB = dimQuoteCountByLOB.group().reduce(
+					pbi.agg.countNonnull("Quote_ID", "N/A").add,
+					pbi.agg.countNonnull("Quote_ID", "N/A").remove,
+					pbi.agg.countNonnull("Quote_ID", "N/A").initial
+				);
+
+				var dimQuoteCountByYearQuarter = dimDefYearQuarter();
+				var metQuoteCountByYearQuarter = dimQuoteCountByYearQuarter.group().reduce(
+					pbi.agg.countNonnull("Quote_ID", "N/A").add,
+					pbi.agg.countNonnull("Quote_ID", "N/A").remove,
+					pbi.agg.countNonnull("Quote_ID", "N/A").initial
+				);
+				var dimPolicyCountByLOB = simpleDimDef("LOB");
+				var metPolicyCountByLOB = dimPolicyCountByLOB.group().reduce(
+					pbi.agg.countNonnull("Policy_ID", "N/A").add,
+					pbi.agg.countNonnull("Policy_ID", "N/A").remove,
+					pbi.agg.countNonnull("Policy_ID", "N/A").initial
+				);
+				var dimPolicyCountByYearQuarter = dimDefYearQuarter();
+				var metPolicyCountByYearQuarter = dimPolicyCountByYearQuarter.group().reduce(
+					pbi.agg.countNonnull("Policy_ID", "N/A").add,
+					pbi.agg.countNonnull("Policy_ID", "N/A").remove,
+					pbi.agg.countNonnull("Policy_ID", "N/A").initial
+				);
+				var dimPremiumByLOB = simpleDimDef("LOB");
+				var metPremiumByLOB = dimPremiumByLOB.group().reduceSum(fAnnualPremium);
+				var dimPremiumByYearQuarter = dimDefYearQuarter();
+				var metPremiumByYearQuarter = dimPremiumByYearQuarter.group().reduceSum(fAnnualPremium);
+
+				// Define color sets.
+				var themeBlueGradientBuilderDesaturationPower = 1;
+				var themeBlueGradientBuilder = tinygradient([
+					d3.rgb(schema["colors"]["theme"]["Matisse"]).hsl().desaturate(themeBlueGradientBuilderDesaturationPower),
+					d3.rgb(schema["colors"]["theme"]["Cerulean"]).hsl().desaturate(themeBlueGradientBuilderDesaturationPower),
+				]);
+				var themeCategoricalGradientBuilderDesaturationPower = 0;
+				themeCategoricalGradientBuilderBrighterPower = 0;
+				var themeCategoricalGradientBuilder = tinygradient([
+					d3.rgb(schema["colors"]["theme"]["Matisse"]).hsl().desaturate(themeBlueGradientBuilderDesaturationPower),
+					d3.rgb(schema["colors"]["theme"]["Cerulean"]).hsl().desaturate(themeBlueGradientBuilderDesaturationPower),
+					d3.rgb(schema["colors"]["theme"]["BrightGreen"]).hsl().desaturate(themeCategoricalGradientBuilderDesaturationPower).brighter(themeCategoricalGradientBuilderBrighterPower)
+				]);
+
+				var themeGrayGradientBuilder = tinygradient([
+					d3.rgb(schema["colors"]["theme"]["Gray"]).darker(2),
+					d3.rgb(schema["colors"]["theme"]["Gray"])
+				]);
+
+				var cLOBScale = d3.scale.category10()
+					.domain(getDimDistinctValues(dimLOB));
+
+				var cYearQuarterScale = d3.scale.ordinal()
+					.domain(getDimDistinctValues(dimYearQuarter).reverse())
+					.range(
+						tinygradient([
+							d3.rgb(schema["colors"]["theme"]["Cerulean"]).hsl().desaturate(themeBlueGradientBuilderDesaturationPower),
+							d3.rgb(schema["colors"]["theme"]["Matisse"]).hsl().desaturate(themeBlueGradientBuilderDesaturationPower),
+						]).rgb(4)
+						.concat(themeGrayGradientBuilder.rgb(4)));
+
+				// Set up charts.
+
+				// Dashboard row 1.
+
+				// Row chart (bar chart).
+				// var: chQuoteBar
+				// ID: ch-quote-bar
+
+				chQuoteBar
+					.dimension(dimQuoteCountByYearQuarter)
+					.group(metQuoteCountByYearQuarter)
+					.cap(8)
+					.othersGrouper(false)
+					.colors(convertDomainToIDs(chQuoteBar.anchorName(), cYearQuarterScale))
+					.colorAccessor(d3OrdinalColorAccessor(cYearQuarterScale))
+					.label(function (d) {
+						return convertYearDecimalToYearQuarter(d.key);
+					})
+					.labelOffsetX(computeLabelOffsetX(chQuoteBar.anchorName(), schema))
+					.labelOffsetY(computeLabelOffsetY(chQuoteBar.anchorName(), schema))
+					.ordering(orderingLatestYearQuarterYOY(latestYearQuarter))
+					// .height(computeChartHeight(chQuoteBar.anchorName(), schema))
+					// .width($("#" + chQuoteBar.anchorName()).width())
+					.margins(computeChartMargins(chQuoteBar.anchorName(), schema))
+					.gap(computeGap(chQuoteBar.anchorName(), schema))
+					.renderTitle(false)
+					.elasticX(computeRowChartElasticX(chQuoteBar.anchorName(), schema))
+					.on("preRender", function (chart) {
+						// chart.height(computeChartHeight(chQuoteBar.anchorName(), schema))
+						chart.height($("#" + chQuoteBar.anchorName()).height());
+						// chart.height(computeChartHeight(chQuoteBar.anchorName(), schema));
+						chart.width($("#" + chQuoteBar.anchorName()).width());
+					})
+					.renderlet(function (chart) {
+
+						addChartTitle(chart.anchorName(), schema);
+
+						chart.selectAll("g.row rect")
+							.style("stroke", computeBarStrokeColor(chart.anchorName(), schema))
+							.style("stroke-width", computeBarStrokeWidth(chart.anchorName(), schema));
+
+						chart.selectAll("g.row")
+							.on('mouseover.tip', function (d, i) {chQuoteBarTip.show(d, this);})
+							.on('mouseout.tip', chQuoteBarTip.hide);
+
+						
+						chart.select("g").call(chQuoteBarTip);
+
+						buildRowChartSVGLinearGradientScale(chart.anchorName(), cYearQuarterScale, schema);
+						
+					});
+				var chQuoteBarTip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<span class='tip-key'>" + convertYearDecimalToYearQuarter(d.key) + ":</strong> <span class='tip-value' style='color:" + d3.rgb(cYearQuarterScale(d.key)).brighter(1) + "'>" + d.value + "</span>";
+					});
+				
+				// Row chart (bar chart).
+				// var: chPolicyBar
+				// ID: ch-policy-bar
+
+				chPolicyBar
+					.dimension(dimPolicyCountByYearQuarter)
+					.group(metPolicyCountByYearQuarter)
+					.colors(convertDomainToIDs(chPolicyBar.anchorName(), cYearQuarterScale))
+					.colorAccessor(d3OrdinalColorAccessor(cYearQuarterScale))
+					.label(function (d) {
+						return convertYearDecimalToYearQuarter(d.key);
+					})
+					.labelOffsetX(computeLabelOffsetX(chPolicyBar.anchorName(), schema))
+					.labelOffsetY(computeLabelOffsetY(chPolicyBar.anchorName(), schema))
+					.ordering(orderingLatestYearQuarterYOY(latestYearQuarter))
+					.height(computeChartHeight(chPolicyBar.anchorName(), schema))
+					.width($("#" + chPolicyBar.anchorName()).width())
+					.margins(computeChartMargins(chPolicyBar.anchorName(), schema))
+					.gap(computeGap(chPolicyBar.anchorName(), schema))
+					.renderTitle(false)
+					.elasticX(computeRowChartElasticX(chPolicyBar.anchorName(), schema))
+					.on("preRender", function (chart) {
+						chart.height($("#" + chPolicyBar.anchorName()).height());
+						chart.width($("#" + chPolicyBar.anchorName()).width());
+					})
+					.renderlet(function (chart) {
+						addChartTitle(chart.anchorName(), schema);
+
+						chart.selectAll("g.row rect")
+							.style("stroke", computeBarStrokeColor(chart.anchorName(), schema))
+							.style("stroke-width", computeBarStrokeWidth(chart.anchorName(), schema));
+
+						chart.selectAll("g.row")
+							.on('mouseover.tip', function (d, i) {chPolicyBarTip.show(d, this);})
+							.on('mouseout.tip', chPolicyBarTip.hide);
+
+						chart.select("g").call(chPolicyBarTip);
+
+						buildRowChartSVGLinearGradientScale(chart.anchorName(), cYearQuarterScale, schema);
+
+					});
+				var chPolicyBarTip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<span class='tip-key'>" + convertYearDecimalToYearQuarter(d.key) + ":</strong> <span class='tip-value' style='color:" + d3.rgb(cYearQuarterScale(d.key)).brighter(1) + "'>" + d.value + "</span>";
+					});
+
+				// Row chart (bar chart).
+				// var: chPremiumBar
+				// ID: ch-premium-bar 
+				
+				chPremiumBar
+					.dimension(dimPremiumByYearQuarter)
+					.group(metPremiumByYearQuarter)
+					.colors(convertDomainToIDs(chPremiumBar.anchorName(), cYearQuarterScale))
+					.colorAccessor(d3OrdinalColorAccessor(cYearQuarterScale))
+					.label(function (d) {
+						return convertYearDecimalToYearQuarter(d.key);
+					})
+					.labelOffsetX(computeLabelOffsetX(chPremiumBar.anchorName(), schema))
+					.labelOffsetY(computeLabelOffsetY(chPremiumBar.anchorName(), schema))
+					.ordering(orderingLatestYearQuarterYOY(latestYearQuarter))
+					.height(computeChartHeight(chPremiumBar.anchorName(), schema))
+					.width($("#" + chPremiumBar.anchorName()).width())
+					.margins(computeChartMargins(chPremiumBar.anchorName(), schema))
+					.gap(computeGap(chPremiumBar.anchorName(), schema))
+					.renderTitle(false)
+					.elasticX(computeRowChartElasticX(chPremiumBar.anchorName(), schema))
+					.on("preRender", function (chart) {
+						chart.height($("#" + chPremiumBar.anchorName()).height());
+						chart.width($("#" + chPremiumBar.anchorName()).width());
+						chart.xAxis().tickFormat(function (v) {
+							return accounting.formatMoney(v, {"precision": 0});
+						});
+
+					})
+					.renderlet(function (chart) {
+
+						chart.selectAll("g.row rect")
+							.style("stroke", computeBarStrokeColor(chart.anchorName(), schema))
+							.style("stroke-width", computeBarStrokeWidth(chart.anchorName(), schema));
+
+						chart.selectAll("g.row")
+							.on('mouseover.tip', function (d, i) {chPremiumBarTip.show(d, this);})
+							.on('mouseout.tip', chPremiumBarTip.hide);
+
+						chart.svg().select("g").call(chPremiumBarTip);
+
+						buildRowChartSVGLinearGradientScale(chart.anchorName(), cYearQuarterScale, schema);
+
+						hideOverlappingHorizontalAxisLabels(chart);
+
+					})
+					.on("postRender", function (chart) {
+						addChartTitle(chart.anchorName(), schema);
+					});
+				var chPremiumBarTip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<span class='tip-key'>" + convertYearDecimalToYearQuarter(d.key) + ":</strong> <span class='tip-value' style='color:" + d3.rgb(cYearQuarterScale(d.key)).brighter(1) + "'>" + accounting.formatMoney(d.value, {"precision": 0}) + "</span>";
+					});
+
+				// Dashboard row 2.
+
+				// Pie chart.
+				// var: chQuotePie
+				// ID: ch-quote-pie
+				
+				chQuotePie
+					.dimension(dimQuoteCountByLOB)
+					.group(metQuoteCountByLOB)
+					.ordering(pbi.ordering.valueDesc)
+					// .height(computeChartHeight(chQuotePie.anchorName(), schema))
+					// .width($("#" + chQuotePie.anchorName()).width())
+					// .height(225)
+					// .width(480)
+					.radius(computePieChartRadius(chQuotePie.anchorName(), schema))
+					.innerRadius(computePieChartInnerRadius(chQuotePie.anchorName(), schema))
+					.renderTitle(false)
+					.colors(convertDomainToIDs(chQuotePie.anchorName(), cLOBScale))
+					.colorAccessor(d3OrdinalColorAccessor(cLOBScale))
+					.on("preRender", function (chart) {
+						chart.height($("#" + chart.anchorName()).height());
+						chart.width($("#" + chart.anchorName()).width());
+						chart.radius((chart.getSmallestDimension()) / 2 * 0.82);
+						chart.innerRadius(chart.radius() - 40);
+					})
+					.renderlet(function (chart) {
+						
+						
+						chart.selectAll("g.pie-slice path")
+							.style("stroke", computePieSliceStrokeColor(chart.anchorName(), schema))
+							.style("stroke-width", computePieSliceStrokeWidth(chart.anchorName(), schema));
+
+						chart.selectAll("g.pie-slice")
+							.on('mouseover.tip', function (d, i) {chQuotePieTip.show(d, this);})
+							.on('mouseout.tip', chQuotePieTip.hide);
+
+						chart.select("g").call(chQuotePieTip);
+
+						buildSVGRadialGradientScale(chart.anchorName(), cLOBScale, schema);
+
+					})
+					.on("postRender", function (chart) {
+						addChartTitle(chQuotePie.anchorName(), schema);
+					});
+				var chQuotePieTip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<span class='tip-key'>" + d.data.key + ":</strong> <span class='tip-value' style='color:" + d3.rgb(cLOBScale(d.data.key)).brighter(1) + "'>" + d.data.value + "</span>";
+					});
+
+				// Pie chart.
+				// var: chPolicyPie
+				// ID: ch-policy-pie
+				chPolicyPie
+					.dimension(dimPolicyCountByLOB)
+					.group(metPolicyCountByLOB)
+					.ordering(pbi.ordering.valueDesc)
+					// .height(computeChartHeight(chPolicyPie.anchorName(), schema))
+					// .width(480)
+					// .height(225)
+					.radius(computePieChartRadius(chPolicyPie.anchorName(), schema))
+					.innerRadius(computePieChartInnerRadius(chPolicyPie.anchorName(), schema))
+					.renderTitle(false)
+					.colors(convertDomainToIDs(chPolicyPie.anchorName(), cLOBScale))
+					.colorAccessor(d3OrdinalColorAccessor(cLOBScale))
+					.on("preRender", function (chart) {
+						chart.height($("#" + chart.anchorName()).height());
+						chart.width($("#" + chart.anchorName()).width());
+						chart.radius((chart.getSmallestDimension()) / 2 * 0.82);
+						chart.innerRadius(chart.radius() - 40);
+					})
+					.renderlet(function (chart) {
+						addChartTitle(chart.anchorName(), schema);
+
+						chart.selectAll("g.pie-slice path")
+							.style("stroke", computePieSliceStrokeColor(chart.anchorName(), schema))
+							.style("stroke-width", computePieSliceStrokeWidth(chart.anchorName(), schema));
+
+						chart.selectAll("g.pie-slice")
+							.on('mouseover.tip', function (d, i) {chPolicyPieTip.show(d, this);})
+							.on('mouseout.tip', chPolicyPieTip.hide);
+
+						chart.select("g").call(chPolicyPieTip);
+
+						buildSVGRadialGradientScale(chart.anchorName(), cLOBScale, schema);
+
+					});
+
+				var chPolicyPieTip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<span class='tip-key'>" + d.data.key + ":</strong> <span class='tip-value' style='color:" + d3.rgb(cLOBScale(d.data.key)).brighter(1) + "'>" + d.data.value + "</span>";
+					});
+
+				// Pie chart.
+				// var: chPremiumPie
+				// ID: ch-premium-pie
+				chPremiumPie
+					.dimension(dimPremiumByLOB)
+					.group(metPremiumByLOB)
+					.ordering(pbi.ordering.valueDesc)
+					// .height(computeChartHeight(chPremiumPie.anchorName(), schema))
+					// .radius(computePieChartRadius(chPremiumPie.anchorName(), schema))
+					.innerRadius(computePieChartInnerRadius(chPremiumPie.anchorName(), schema))
+					.renderTitle(false)
+					.colors(convertDomainToIDs(chPremiumPie.anchorName(), cLOBScale))
+					.colorAccessor(d3OrdinalColorAccessor(cLOBScale))
+					.on("preRender", function (chart) {
+						chart.height($("#" + chart.anchorName()).height());
+						chart.width($("#" + chart.anchorName()).width());
+						chart.radius((chart.getSmallestDimension()) / 2 * 0.82);
+						chart.innerRadius(chart.radius() - 40);
+					})
+					.renderlet(function (chart) {
+						addChartTitle(chart.anchorName(), schema);
+
+						chart.selectAll("g.pie-slice path")
+							.style("stroke", computePieSliceStrokeColor(chart.anchorName(), schema))
+							.style("stroke-width", computePieSliceStrokeWidth(chart.anchorName(), schema));
+
+						chart.selectAll("g.pie-slice")
+							.on('mouseover.tip', function (d, i) {chPremiumPieTip.show(d, this);})
+							.on('mouseout.tip', chPremiumPieTip.hide);
+
+							// WIP advanced segment highlight code.
+				//   		chart.selectAll("g.pie-slice path")
+				//   			.on('mouseover.highlight', function (d, i) { 
+				//   				var fill = d3.select(this).attr("fill");
+				//   				var gradientID = fill.substring(4, fill.length - 1);
+				//   				d3.select(gradientID).selectAll("stop")
+				//   					.attr("previousStopColor", function (d, i) {
+				//   						return d3.select(this).style("stop-color");
+				//   					})
+				//   					;
+				//   				d3.select(this).attr("gradientID", gradientID);
+				//   				d3.select(gradientID).selectAll("stop").transition()
+				//   					.style("stop-color", d3.rgb(cLOBScale(d.data.key)).brighter(1))
+				//   					.duration(500)
+				//   					.each("interrupt", function (d, i) {
+				//   						d3.select(this).style("stop-color", d3.rgb(cLOBScale(d.data.key)).brighter(1));
+				//   					});
+							// 	// d3.select(this).transition().style("fill", d3.rgb(cLOBScale(d.data.key)).brighter(1)).duration(500);
+							// })
+							// .on('mouseout.highlight', function (d, i) {
+							// 	d3.select(d3.select(this).attr("gradientID")).selectAll("stop").transition()
+				//   					.style("stop-color", function (d, i) {return d3.rgb(cLOBScale(d.data.key));})
+				//   					.duration(500)
+				//   					.each("interrupt", function (d, i) {
+				//   						d3.select(this).style("stop-color", d3.rgb(cLOBScale(d.data.key)));
+				//   					});
+							// })
+							;
+
+						chart.select("g").call(chPremiumPieTip);
+
+						buildSVGRadialGradientScale(chart.anchorName(), cLOBScale, schema);
+
+					});
+				var chPremiumPieTip = d3.tip()
+					.attr('class', 'd3-tip')
+					.offset([-10, 0])
+					.html(function(d) {
+						return "<span class='tip-key'>" + d.data.key + ":</strong> <span class='tip-value' style='color:" + d3.rgb(cLOBScale(d.data.key)).brighter(1) + "'>" + accounting.formatMoney(d.data.value, {"precision": 0}) + "</span>";
+					});
+
+				// Dashboard row 3.
+
+				// Tabular data row display.
+				// var: tbRows
+				// ID: tb-rows
+				buildTableBox("tb-rows", "tb-rows-anchor", ["Year", "Quarter", "Date", "LOB", "Quote_ID", "Policy_ID", "Annual_Premium"], schema);
+				tbRows = dc.dataTable("#tb-rows");
+				tbRows
+					.size(Infinity)
+					.dimension(dimQuarter)
+					.group(function() {return "PAS Records";})
+					.columns([
+						fYear,
+						fQuarter,
+						displayField("Date", schema),
+						fLOB,
+						fQuoteID,
+						fPolicyID,
+						// fAnnualPremium
+						displayField("Annual_Premium", schema)
+					])
+					.renderChartResetButton(false)
+					.renderChartDownloadImageButton(false)
+					.sortBy(fDate)
+					// Remove unnecessary gruop row.
+					.renderlet(function (chart) {
+						$("#" + chart.anchorName() + " .dc-table-group").remove();
+					})
+					// TODO: fix sorting to actually work
+					// .order(d3.descending)
+					;
+
+
+
+				// Total row count and filtered row count.
+				dc.dataCount("#data-count")
+					.dimension(ndx)
+					.group(all)
+					.on("postRender", function (chart) {
+						$(".filter-count[init!='true']").each(function (index) {
+							$(this).css("width", $(this).innerWidth());
+							$(this).attr("init", "true");
+						});
+
+						var filterCountSelector = ".filter-count";
+						var resetAllSelector = ".reset-all";
+						var filteredRecordCount = all.value();
+						
+						if (filteredRecordCount < ndx.size()) {
+							$(filterCountSelector).removeClass("not-filtered");
+							$(filterCountSelector).addClass("filtered");
+							$(resetAllSelectofr).removeClass("disabled");
+						} else {
+							$(filterCountSelector).removeClass("filtered");
+							$(filterCountSelector).addClass("not-filtered");
+							$(resetAllSelector).addClass("disabled");
+						}
+					})
+					.on("postRedraw", function (chart) {
+						var filterCountSelector = ".filter-count";
+						var resetAllSelector = ".reset-all";
+						var filteredRecordCount = all.value();
+
+						if (filteredRecordCount < ndx.size()) {
+							$(filterCountSelector).removeClass("not-filtered");
+							$(filterCountSelector).addClass("filtered");
+							$(resetAllSelector).removeClass("disabled");
+						} else {
+							$(filterCountSelector).removeClass("filtered");
+							$(filterCountSelector).addClass("not-filtered");
+							$(resetAllSelector).addClass("disabled");
+						}
+					})
+					.renderChartResetButton(false)
+					.renderChartDownloadImageButton(false)
+					;
+
+				// Render all charts.
+				$(".chart-dashboard").fadeTo(0,0);
+				// dc.renderAll();
+				// fadeInAllCharts();
+
+
+				// Other UI definitions.
+
+				// Enable "reset all" buttons.
+				$(".reset-all").click(resetAll);
+
+				// Enable CSV export button.
+
+				$("#tb-rows-download-csv").click( function() {
+					downloadTableAsCSV("tb-rows", "Perceptrix PAS Records");
+				});
+
+				// Enable button for copy CSV to clipboard.
+
+				userOnDemandCopyTableCSVToClipboard("#tb-rows-copy-csv", "tb-rows");
+
+				// Enable keyboard controls.
+				$(document).keyup(function(event) {
+					var WHICH_1 = 49;
+					var WHICH_2 = 50;
+					var WHICH_I = 73;
+					var WHICH_P = 80;
+					var WHICH_BACKSPACE = 8;
+					var WHICH_DELETE = 46;
+					// console.log(event.which);
+					event.preventDefault();
+
+					if (event.which == WHICH_DELETE) {
+						$("#navbar-reset-all").click();
+					}
+
+					if (event.which == WHICH_BACKSPACE) {
+						dc.getChartByAnchorName($(".chart-selected").first().attr("id")).resetChart();
+					}
+
+					if (event.which == WHICH_1) {
+						savedLayout = originalLayout.slice();
+					}
+
+					if (event.which == WHICH_2) {
+						savedLayout = verticalLayout.slice();
+					}
+
+				});
+
+				// Enable chart selection.
+
+				$(".graph-dashboard").on("mousedown", function () {
+					$(".chart-selected").removeClass("chart-selected");
+					$(this).addClass("chart-selected");
+				});
+
+				// Affix table box title.
+
+				generatedCSS = document.createElement('style');
+				generatedCSS.innerHTML = "#tb-rows-header.affix {top: " + $("nav.navbar-fixed-top").height() + "px;}";
+				document.body.appendChild(generatedCSS);
+				$('#tb-rows-header').affix({
+					offset: {
+						top: $('#tb-rows-header').offset().top - $("nav.navbar-fixed-top").outerHeight()
+					}
+				});
+				$("#tb-rows-header-wrapper").height($("#tb-rows-header").height());
+
+				// Enable simulation button.
+
+				var simulationButton = $("#simulate-real-time");
+				simulationButton.data("enabled", false);
+				simulationButton.data("glyphicon-enabled", "glyphicon-pause");
+				simulationButton.data("glyphicon-disabled", "glyphicon-play");
+				simulationButton.click(function() {
+					var simulationButtonGlyphicon = simulationButton.find("span.glyphicon");
+
+					var toggleSimulationState = function () {
+						
+						var enableSimulation = function () {
+							simulationEnabled = true;
+							simulationButton.data("enabled", true);
+							pbi.removeGlyphiconImageClasses(simulationButtonGlyphicon);
+							simulationButtonGlyphicon.addClass(simulationButton.data("glyphicon-enabled"))
+							simulationLoop(ndx);
+						};
+						var disableSimulation = function () {
+							simulationEnabled = false;
+							simulationButton.data("enabled", false);
+							pbi.removeGlyphiconImageClasses(simulationButtonGlyphicon);
+							simulationButtonGlyphicon.addClass(simulationButton.data("glyphicon-disabled"))
+						};
+
+						if (simulationButton.data("enabled") == true) {
+							disableSimulation();
+						} else {
+							enableSimulation();
+						}
+					};
+
+					toggleSimulationState()
+				});
+
+				
+
+				// Enable experimental UI features.
+
+				if (pbi.environment.EXPERIMENTAL_FEATURES_ENABLED) {
+
+					// Enable draggable charts.
+
+					// $(".graph-dashboard").draggable({
+					// 	handle: ".chart-title",
+					// 	opacity: 0.9,
+					// 	zIndex: 5
+					// }).each(function (index, element) {
+					// 	$(this).position({
+					// 		"my": "center center",
+					// 		"at": "center center",
+					// 		"of": $(this).closest(".chart-receptacle")
+					// 	})
+					// })
+
+
+					// Enable dockable  charts.
+
+					// TODO add class for docked charts
+					// TODO add class for receptacles that have a chart
+					// TODO use classes to control ability of receptacle to receive chart
+					// TODO change fit tolerance to intersection
+					// TODO add resizable handle and glyphicon (reize vertical + resize horizontal)
+					// TODO get charts to adjust width and height to receptacle
+					// TODO add chart maximize and restore functionality and controls
+
+					// var handleChartDrop = function (event, ui) {
+					// 	var receiver = this;
+					// 	ui.draggable.position({
+					// 		"my": "center center",
+					// 		"at": "center center",
+					// 		"of": $(receiver)
+					// 	})
+					// 	console.log($(this).attr("class"));
+					// 	$(ui).width($(receiver).innerWidth());
+					// }
+
+					// $(".chart-receptacle").droppable({
+					// 	drop: handleChartDrop,
+					// 	tolerance: "fit"
+					// });
+
+					// Enable resizable charts.
+					// TODO: add render after resize
+
+					// $(".row-dashboard .dc-chart").resizable({
+					// 	"stop": function (event, ui) {
+					// 		// dc.getChartByAnchorName(ui.element.attr("id")).render();
+					// 	}
+					// });
+
+				}
+
+
+				// addChartCSVDownloadButton("ch-quote-pie");
+				// csvDownloadButton = $("#ch-quote-pie").closest("*:not(#ch-quote-pie)").find(".btn.chart-csv-dl")
+				// $("#ch-quote-pie").closest("*:not(#ch-quote-pie)").hover(
+				// 	// Mouse in
+				// 	function() {
+				// 		csvDownloadButton.finish().fadeTo(1000, 1)
+				// 	},
+				// 	// Mouse out
+				// 	function() {
+				// 		csvDownloadButton.finish().fadeTo(1000, 0)
+				// 	}
+				// )
+
+
+			});
+
+		</script>
+
+	</body>
+	</html>

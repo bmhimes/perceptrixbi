@@ -1,0 +1,67 @@
+
+
+#tb-rows-Year, #tb-rows-Quarter, #tb-rows-Date, #tb-rows-LOB, #tb-rows-Quote_ID, #tb-rows-Policy_ID, #tb-rows-Annual_Premium {
+	text-align: center;
+}
+
+.dc-table-column._0, .dc-table-column._1, .dc-table-column._2, .dc-table-column._3, .dc-table-column._4, .dc-table-column._5, .dc-table-column._6 {
+	text-align: center;
+}
+
+#dashboard-grid {
+	margin-left: -15px;
+	margin-right: -15px;
+}
+
+#navbar-save-layout, #navbar-restore-layout {
+	font-size: 10px;
+}
+
+#dashboard-grid .preview-holder {
+	/*background-color: rgba(0,187,250,0.15);*/
+	background-color: rgba(16,255,0,0.25);
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+}
+
+.graph-dashboard {
+	width: 32%;
+	opacity: 0;
+}
+
+#main > .row-dashboard:last-child {
+	box-shadow: 0px 0px 0px 0 rgba(0, 0, 0, 0.2), 0px 1px 20px 0 rgba(0, 0, 0, 0.1);
+	margin-top: 10px;
+}
+
+#data-count {
+	margin-top: 0px;
+}
+
+.filter-row {
+	margin-top: 0px;
+	padding-bottom: 10px;
+}
+
+#tb-rows-title {
+	text-align: center !important;
+}
+
+
+#tb-rows-header {
+	background-color: #FFFFFF;
+}
+
+#tb-rows-header.affix {
+	z-index: 2;
+	width: 100%;
+}
+
+#tb-rows-header a.btn {
+	margin-top: 3px;
+}
+
+#tb-rows-export {
+	z-index: 3;
+}
